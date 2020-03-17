@@ -1,8 +1,6 @@
-# unifier-blockchain-api-gateway project
+# Xuanwu Gate
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
-
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+an infrastructure layer that radically simplifies the development of any Blockchain and Crypto related applications.
 
 ## Running the application in dev mode
 
