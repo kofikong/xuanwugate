@@ -5,6 +5,7 @@ import java.lang.reflect.InvocationTargetException;
 import com.xuanwugate.blockchain.bitcoin.service.BitcoinAddressService;
 import com.xuanwugate.blockchain.bitcoin.service.BitcoinBlockService;
 import com.xuanwugate.blockchain.bitcoin.service.BitcoinBlockchainService;
+import com.xuanwugate.blockchain.bitcoin.service.BitcoinHDWalletService;
 import com.xuanwugate.blockchain.bitcoin.service.BitcoinPaymentService;
 import com.xuanwugate.blockchain.bitcoin.service.BitcoinTransactionService;
 import com.xuanwugate.blockchain.bitcoin.service.BitcoinWalletService;
@@ -16,7 +17,7 @@ import com.xuanwugate.blockchain.core.BaseEndpoint;
 /**
  * Bitcoin
  */
-public class Bitcoin extends BaseEndpoint<BitcoinBlockchainService,BitcoinBlockService,BitcoinAddressService,BitcoinTransactionService,BitcoinWalletService,BitcoinWebhookService,BitcoinPaymentService>{
+public class Bitcoin extends BaseEndpoint<BitcoinBlockchainService,BitcoinBlockService,BitcoinAddressService,BitcoinTransactionService,BitcoinWalletService,BitcoinHDWalletService,BitcoinWebhookService,BitcoinPaymentService>{
 
     public Bitcoin(EndpointConfig endpointConfig) {
         super(endpointConfig);
@@ -111,6 +112,27 @@ public class Bitcoin extends BaseEndpoint<BitcoinBlockchainService,BitcoinBlockS
 		try {
             if(BlockchainConfig.VERSION_V1.equals(config.getVersion())){
                 return getConstructor(BitcoinWalletService.class).newInstance(config);
+            }
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+            e.printStackTrace();
+        }
+        
+        return null;
+	}
+
+	@Override
+	protected BitcoinHDWalletService initHDWalletService(EndpointConfig config) {
+		try {
+            if(BlockchainConfig.VERSION_V1.equals(config.getVersion())){
+                return getConstructor(BitcoinHDWalletService.class).newInstance(config);
             }
 		} catch (InstantiationException e) {
 			e.printStackTrace();

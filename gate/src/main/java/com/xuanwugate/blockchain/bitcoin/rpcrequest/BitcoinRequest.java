@@ -20,6 +20,8 @@ import io.netty.util.internal.StringUtil;
  */
 public class BitcoinRequest implements IRequestParams {
     private JSONRPC jsonRPC;
+    private String uriSuffix = "";
+
     public BitcoinRequest(){
         jsonRPC = new JSONRPC();
     }
@@ -34,7 +36,7 @@ public class BitcoinRequest implements IRequestParams {
 
 	@Override
 	public String getUri() {
-        return BlockchainConfig.getInstance().getBitcoinRPCUri();
+        return BlockchainConfig.getInstance().getBitcoinRPCUri() + getUriSuffix();
     }
     
     @Override
@@ -75,4 +77,20 @@ public class BitcoinRequest implements IRequestParams {
 	public JSONRPC getJSONRPC() {
 		return jsonRPC;
 	}
+
+	public String getUriSuffix() {
+		return uriSuffix;
+	}
+
+	public void setUriSuffix(String uriSuffix) {
+        if(uriSuffix == null){
+            uriSuffix = "";
+        }
+
+		this.uriSuffix = uriSuffix;
+    }
+    
+    public void setUriWithWalletName(String walletName){
+        setUriSuffix(String.format("/wallet/%s", walletName));
+    }
 }

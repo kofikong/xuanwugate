@@ -2,7 +2,7 @@ package com.xuanwugate.blockchain.bitcoin.response;
 
 import com.alibaba.fastjson.JSONObject;
 
-import com.xuanwugate.blockchain.common.EnumCoin;
+import com.xuanwugate.rpc.ErrorInfo;
 import com.xuanwugate.rpc.IPayload;
 
 /**
@@ -102,10 +102,6 @@ public class GeneralInformationResponse implements IPayload {
 		this.currency = currency;
 	}
 
-	public void setCurrency(EnumCoin coin) {
-		this.currency = coin.name();
-	}
-
 	public long getTransactions() {
 		return transactions;
 	}
@@ -120,5 +116,15 @@ public class GeneralInformationResponse implements IPayload {
 	
 	public void setVerificationProgress(double verificationProgress) {
 		this.verificationProgress = verificationProgress;
+	}
+	@Override
+	public void setError(ErrorInfo error) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public ErrorInfo getError() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

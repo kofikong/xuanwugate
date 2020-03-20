@@ -3,6 +3,7 @@ package com.xuanwugate.blockchain.bitcoin.response;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
+import com.xuanwugate.rpc.ErrorInfo;
 import com.xuanwugate.rpc.IPayload;
 
 /**
@@ -100,5 +101,17 @@ public class AddressDetailsResponse  implements IPayload {
 
 	public void setAddresses(List<String> addresses) {
 		this.addresses = addresses;
+	}
+
+	@Override
+	public void setError(ErrorInfo error) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ErrorInfo getError() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

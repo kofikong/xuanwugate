@@ -16,6 +16,7 @@ BS extends BlockService,
 AS extends AddressService,
 TS extends TransactionService,
 WS extends WalletService,
+HDWS extends HDWalletService,
 WHS extends WebhookService,
 PS extends PaymentService> extends BaseConstructor {
     protected TS transactionService;
@@ -23,6 +24,7 @@ PS extends PaymentService> extends BaseConstructor {
     protected BS blockService;
     protected AS addressService;
     protected WS walletService;
+    protected HDWS HDWalletService;
     protected WHS webhookService;
     protected PS paymentService;
 
@@ -38,6 +40,7 @@ PS extends PaymentService> extends BaseConstructor {
             this.blockService = initBlockService(config);
             this.addressService = initAddressService(config);
             this.walletService   = initWalletService(config);
+            this.HDWalletService   = initHDWalletService(config);
             this.paymentService = initPaymentService(config);
             this.webhookService = initWebhookService(config);
         } catch (Exception e) {
@@ -50,6 +53,7 @@ PS extends PaymentService> extends BaseConstructor {
     protected abstract AS initAddressService(EndpointConfig config);
     protected abstract TS initTransactionService(EndpointConfig config);
     protected abstract WS initWalletService(EndpointConfig config);
+    protected abstract HDWS initHDWalletService(EndpointConfig config);
     protected abstract PS initPaymentService(EndpointConfig config);
     protected abstract WHS initWebhookService(EndpointConfig config);
 
@@ -71,6 +75,10 @@ PS extends PaymentService> extends BaseConstructor {
     
 	public WS getWalletService() {
 		return this.walletService;
+    }
+    
+    public HDWS getHDWalletService() {
+		return this.HDWalletService;
 	}
 
 	public WHS getWebhookService() {

@@ -1,5 +1,6 @@
 package com.xuanwugate.blockchain.bitcoin.response;
 
+import com.xuanwugate.rpc.ErrorInfo;
 import com.xuanwugate.rpc.IPayload;
 
 /**
@@ -42,5 +43,15 @@ public class GenerateAddressResponse  implements IPayload {
 	}
 	public void setWif(String wif) {
 		this.wif = wif;
+	}
+	@Override
+	public void setError(ErrorInfo error) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public ErrorInfo getError() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

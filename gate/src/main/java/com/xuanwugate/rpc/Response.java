@@ -3,41 +3,23 @@ package com.xuanwugate.rpc;
 /**
  * Payload
  */
-public class Response {
-    private Response(IPayload payload,int errorCode){
-        this.payload = payload;
-        this.errorCode = errorCode;
-    }
-    
-    public static Response create(IPayload payload){
-        if(payload != null){
-            return new Response(payload,0);
+public abstract class Response {
+
+    public static Response build(IPayload load){
+        if(load == null){
+            return new ErrorResponse(ErrorInfo.GeneralError("no data"));
+        }
+        
+        ErrorInfo info = load.getError();
+        if(info == null){
+            return new PayloadResponse(load);
         }
         else{
-            return new Response(new EmptyPayload(),-1);
+            return new ErrorResponse(info);
         }
     }
 
-    public static Response error(int errorCode){
-        return new Response(new EmptyPayload(),-1);
+    public static Response error(ErrorInfo info){
+        return new ErrorResponse(info);
     }
-    
-    private IPayload payload;
-    private int errorCode = 0;
-    
-	public IPayload getPayload() {
-		return payload;
-	}
-
-	public void setPayload(IPayload payload) {
-		this.payload = payload;
-	}
-
-	public int getErrorCode() {
-		return errorCode;
-	}
-
-	public void setErrorCode(int errorCode) {
-		this.errorCode = errorCode;
-	}
 }

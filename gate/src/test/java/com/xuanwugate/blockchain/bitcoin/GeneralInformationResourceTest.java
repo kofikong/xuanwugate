@@ -20,12 +20,12 @@ public class GeneralInformationResourceTest {
         final Response res = given()
         .header("X-API-KEY", "your-api-key")
         .header("Authorization", "Bearer "+token_id)
-        .get("http://localhost:8080/v1/bc/btc/mainnet/info").prettyPeek();
+        .get("http://localhost:8080/v1/bc/btc/testnet/info").prettyPeek();
         final JsonPath bodyJson = res.getBody().jsonPath();
-        final int errorCode = bodyJson.getInt("errorCode");
         final String payload = bodyJson.getString("payload");
+        final String meta = bodyJson.getString("meta");
         res.then().statusCode(equalTo(200));
-        Assertions.assertTrue(errorCode == 0 && payload != null && !token_id.isEmpty());
+        Assertions.assertTrue(payload != null,meta);
     }
 
     @Test
@@ -37,10 +37,10 @@ public class GeneralInformationResourceTest {
         .header("Authorization", "Bearer "+token_id)
         .get("http://localhost:8080/v1/bc/btc/mainnet/blocks/00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09").prettyPeek();
         final JsonPath bodyJson = res.getBody().jsonPath();
-        final int errorCode = bodyJson.getInt("errorCode");
         final String payload = bodyJson.getString("payload");
+        final String meta = bodyJson.getString("meta");
         res.then().statusCode(equalTo(200));
-        Assertions.assertTrue(errorCode == 0 && payload != null && !token_id.isEmpty());
+        Assertions.assertTrue(payload != null,meta);
     }
 
     @Test
@@ -50,12 +50,12 @@ public class GeneralInformationResourceTest {
         final Response res = given()
         .header("X-API-KEY", "your-api-key")
         .header("Authorization", "Bearer "+token_id)
-        .get("http://localhost:8080/v1/bc/btc/mainnet/blocks/564349").prettyPeek();
+        .get("http://localhost:8080/v1/bc/btc/testnet/blocks/564349").prettyPeek();
         final JsonPath bodyJson = res.getBody().jsonPath();
-        final int errorCode = bodyJson.getInt("errorCode");
         final String payload = bodyJson.getString("payload");
+        final String meta = bodyJson.getString("meta");
         res.then().statusCode(equalTo(200));
-        Assertions.assertTrue(errorCode == 0 && payload != null && !token_id.isEmpty());
+        Assertions.assertTrue(payload != null,meta);
     }
 
     @Test
@@ -65,11 +65,11 @@ public class GeneralInformationResourceTest {
         final Response res = given()
         .header("X-API-KEY", "your-api-key")
         .header("Authorization", "Bearer "+token_id)
-        .get("http://localhost:8080/v1/bc/btc/mainnet/blocks/latest").prettyPeek();
+        .get("http://localhost:8080/v1/bc/btc/testnet/blocks/latest").prettyPeek();
         final JsonPath bodyJson = res.getBody().jsonPath();
-        final int errorCode = bodyJson.getInt("errorCode");
         final String payload = bodyJson.getString("payload");
+        final String meta = bodyJson.getString("meta");
         res.then().statusCode(equalTo(200));
-        Assertions.assertTrue(errorCode == 0 && payload != null && !token_id.isEmpty());
+        Assertions.assertTrue(payload != null,meta);
     }
 }

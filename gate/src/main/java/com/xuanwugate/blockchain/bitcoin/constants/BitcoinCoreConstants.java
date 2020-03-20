@@ -40,11 +40,37 @@ public interface BitcoinCoreConstants {
      */
     String GET_ADDRESS_INFO = "getaddressinfo";
 
-
     /**
      * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "createwallet", "params": ["testwallet"] }' -H 'content-type: text/plain;' http://127.0.0.1:8332/
      */
     String CREATE_WALLET = "createwallet";
+
+    /**
+     * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "addmultisigaddress", "params": [2, "[\"16sSauSf5pF2UkUwvKGq4qjNRzBZYqgEL5\",\"171sgjn4YtPu27adkKGrdDwzRTxnRkBfKV\"]"] }' -H 'content-type: text/plain;' http://127.0.0.1:8332/
+     */
+    String ADD_MULTISIG_ADDRESS = "addmultisigaddress";
+
+    /**
+     * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getwalletinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8332/wallet/walletName
+     */
+    String GET_WALLET_INFO = "getwalletinfo";
+    
+    /**
+     * curl --user myusername --data-binary '{"method":"importprivkey","params":["cWALDVKUUR9eZCC3qk1MjQBuAq9MKQppEw7w1DCdqoSkr57SEYEW","testnetDVD",false],"id":"koftest3","jsonrpc":"2.0"}' -H 'content-type: text/plain;' http://127.0.0.1:8332/wallet/walletName
+     */
+    String IMPORT_PRIVKEY = "importprivkey";
+    
+    /**
+     * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listlabels", "params": [receive] }' -H 'content-type: text/plain;' http://127.0.0.1:8332/wallet/walletName
+     */
+    String LIST_LABELS = "listlabels";
+    
+    /**
+     * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressesbylabel", "params": ["tabby"] }' -H 'content-type: text/plain;' http://127.0.0.1:8332/wallet/walletName
+     */
+    String GET_ADDRESSES_BY_LABEL = "getaddressesbylabel";
+
+
 
     /**
 ￼

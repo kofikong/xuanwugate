@@ -17,7 +17,9 @@ import com.xuanwugate.blockchain.bitcoin.response.BlockResponse;
 import com.xuanwugate.blockchain.bitcoin.response.GeneralInformationResponse;
 import com.xuanwugate.blockchain.bitcoin.service.BitcoinBlockService;
 import com.xuanwugate.blockchain.bitcoin.service.BitcoinBlockchainService;
+import com.xuanwugate.blockchain.constants.BlockchainConstants;
 import com.xuanwugate.client.XuanwuGate;
+import com.xuanwugate.rpc.ErrorInfo;
 import com.xuanwugate.rpc.Response;
 
 @Path("/{version}/bc/btc")
@@ -38,15 +40,11 @@ public class GeneralInformationResource {
         Bitcoin btc = gate.connectToBtc(network);
         BitcoinBlockchainService service = btc.getBlockchainService();
         GeneralInformationResponse obj = service.getNodeInformation();
-        return Response.create(obj);
+        return Response.build(obj);
       } catch (IOException e) {
         e.printStackTrace();
         log.debug(e.getMessage());
-        return Response.error(-1);
-      } catch (Exception e) {
-        e.printStackTrace();
-        log.debug(e.getMessage());
-        return Response.error(-1);
+        return Response.error(ErrorInfo.BlockchainConnectionError(BlockchainConstants.BITCOIN));
       }
     }
 
@@ -66,15 +64,11 @@ public class GeneralInformationResource {
         else{
           obj = service.getBlockByHash(blockHash_or_blockHeight);
         }
-        return Response.create(obj);
+        return Response.build(obj);
       } catch (IOException e) {
         e.printStackTrace();
         log.debug(e.getMessage());
-        return Response.error(-1);
-      } catch (Exception e) {
-        e.printStackTrace();
-        log.debug(e.getMessage());
-        return Response.error(-1);
+        return Response.error(ErrorInfo.BlockchainConnectionError(BlockchainConstants.BITCOIN));
       }
     }
 
@@ -88,15 +82,11 @@ public class GeneralInformationResource {
         Bitcoin btc = gate.connectToBtc(network);
         BitcoinBlockService service = btc.getBlockService();
         BlockResponse obj = service.getBlockLatest();
-        return Response.create(obj);
+        return Response.build(obj);
       } catch (IOException e) {
         e.printStackTrace();
         log.debug(e.getMessage());
-        return Response.error(-1);
-      } catch (Exception e) {
-        e.printStackTrace();
-        log.debug(e.getMessage());
-        return Response.error(-1);
+        return Response.error(ErrorInfo.BlockchainConnectionError(BlockchainConstants.BITCOIN));
       }
     }
 }

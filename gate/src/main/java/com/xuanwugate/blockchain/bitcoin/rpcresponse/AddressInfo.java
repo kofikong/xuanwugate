@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * AddressInfo
  */
-public class AddressInfo implements RPCResult{
+public class AddressInfo extends RPCResult{
     private String address; 
     private String scriptPubKey; 
     private boolean ismine; 
@@ -143,7 +143,7 @@ public class AddressInfo implements RPCResult{
 
 	public void setLabels(List<Map<String,Object>> labels) {
 		this.labels= labels;
-	} 
+	}
 }
 
 /**

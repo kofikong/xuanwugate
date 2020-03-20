@@ -15,10 +15,16 @@ import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
-import com.xuanwugate.blockchain.bitcoin.request.CreateWallet;
-import com.xuanwugate.blockchain.bitcoin.response.WalletResponse;
+import com.xuanwugate.blockchain.bitcoin.constants.BitcoinCoreConstants;
+import com.xuanwugate.blockchain.bitcoin.requestparams.CreateHDWallet;
+import com.xuanwugate.blockchain.bitcoin.requestparams.CreateWallet;
+import com.xuanwugate.blockchain.bitcoin.response.CreateHDWalletResponse;
+import com.xuanwugate.blockchain.bitcoin.response.CreateWalletResponse;
+import com.xuanwugate.blockchain.bitcoin.service.BitcoinHDWalletService;
 import com.xuanwugate.blockchain.bitcoin.service.BitcoinWalletService;
+import com.xuanwugate.blockchain.constants.BlockchainConstants;
 import com.xuanwugate.client.XuanwuGate;
+import com.xuanwugate.rpc.ErrorInfo;
 import com.xuanwugate.rpc.Response;
 
 @Path("/{version}/bc/btc")
@@ -38,16 +44,31 @@ public class WalletResource {
         XuanwuGate gate = new XuanwuGate(version);
         Bitcoin btc = gate.connectToBtc(network);
         BitcoinWalletService service = btc.getWalletService();
-        WalletResponse obj = service.createWallet(info);
-        return Response.create(obj);
+        CreateWalletResponse obj = service.createWallet(info);
+        return Response.build(obj);
       } catch (IOException e) {
         e.printStackTrace();
         log.debug(e.getMessage());
-        return Response.error(-1);
-      } catch (Exception e) {
+        return Response.error(ErrorInfo.BlockchainConnectionError(BlockchainConstants.BITCOIN));
+      }
+    }
+
+    @POST
+    @Path("{network}/wallets/hd/")
+    // @PermitAll
+    @RolesAllowed("Subscriber")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response createHDWallet(@Context SecurityContext ctx, @PathParam String version, @PathParam String network,@BeanParam CreateHDWallet info) {
+      try {
+        XuanwuGate gate = new XuanwuGate(version);
+        Bitcoin btc = gate.connectToBtc(network);
+        BitcoinHDWalletService service = btc.getHDWalletService();
+        CreateHDWalletResponse obj = service.createHDWallet(info);
+        return Response.build(obj);
+      } catch (IOException e) {
         e.printStackTrace();
         log.debug(e.getMessage());
-        return Response.error(-1);
+        return Response.error(ErrorInfo.BlockchainConnectionError(BlockchainConstants.BITCOIN));
       }
     }
 }

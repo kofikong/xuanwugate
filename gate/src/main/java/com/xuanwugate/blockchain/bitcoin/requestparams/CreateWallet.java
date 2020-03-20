@@ -1,7 +1,6 @@
-package com.xuanwugate.blockchain.bitcoin.request;
+package com.xuanwugate.blockchain.bitcoin.requestparams;
 
-import java.util.Set;
-
+import java.util.List;
 import javax.ws.rs.QueryParam;
 
 /**
@@ -11,7 +10,7 @@ public class CreateWallet {
 	@QueryParam("walletName")
 	private String walletName;
 	@QueryParam("addresses")
-	private Set<String> addresses;
+	private List<String> addresses;
 	
 	public String getWalletName() {
 		return walletName;
@@ -21,11 +20,11 @@ public class CreateWallet {
 		this.walletName = walletName;
 	}
 
-	public Set<String> getAddresses() {
+	public List<String> getAddresses() {
 		return addresses;
 	}
 
-	public void setAddresses(Set<String> addresses) {
+	public void setAddresses(List<String> addresses) {
 		this.addresses = addresses;
 	}
 

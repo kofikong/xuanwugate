@@ -1,8 +1,6 @@
 package com.xuanwugate.blockchain.bitcoin.service;
 
 import java.io.IOException;
-
-import com.alibaba.fastjson.JSONObject;
 import com.xuanwugate.blockchain.bitcoin.constants.BitcoinCoreConstants;
 import com.xuanwugate.blockchain.bitcoin.rpcrequest.BitcoinRequest;
 import com.xuanwugate.blockchain.bitcoin.rpcresponse.AddressInfo;
@@ -36,21 +34,22 @@ public class BitcoinAddressService extends AddressService {
 	private String getNewAddress() throws IOException {
 		BitcoinRequest request = new BitcoinRequest();
 		request.setMethod(BitcoinCoreConstants.GET_NEW_ADDRESS);
+		request.setUriSuffix("/wallet/");
 		String res = RPCProxy.run(request);
 		String address = RPCResult.parse(String.class,res);
 		return address;
 	}
 
-	private String dumpPrivkey (String address) throws IOException{
+	public String dumpPrivkey (String address) throws IOException{
 		if(address == null){
 			return null;
 		}
 
 		BitcoinRequest request = new BitcoinRequest();
 		request.setMethod(BitcoinCoreConstants.DUMP_PRIV_KEY);
+		request.setUriWithWalletName("");
 		request.getParams().add(address);
 		String res = RPCProxy.run(request);
-		System.out.println(res);
 		String privateKey = RPCResult.parse(String.class,res);
 		return privateKey;
 	}
@@ -62,6 +61,7 @@ public class BitcoinAddressService extends AddressService {
 
 		BitcoinRequest request = new BitcoinRequest();
 		request.setMethod(BitcoinCoreConstants.GET_ADDRESS_INFO);
+		request.setUriSuffix("/wallet/");
 		request.getParams().add(address);
 		String res = RPCProxy.run(request);
 		AddressInfo info = RPCResult.parse(AddressInfo.class,res);

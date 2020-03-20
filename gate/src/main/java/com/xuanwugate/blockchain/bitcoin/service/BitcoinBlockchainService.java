@@ -7,7 +7,7 @@ import com.xuanwugate.blockchain.bitcoin.constants.BitcoinCoreConstants;
 import com.xuanwugate.blockchain.bitcoin.rpcrequest.BitcoinRequest;
 import com.xuanwugate.blockchain.bitcoin.response.GeneralInformationResponse;
 import com.xuanwugate.blockchain.common.EndpointConfig;
-import com.xuanwugate.blockchain.common.EnumCoin;
+import com.xuanwugate.blockchain.constants.BlockchainConstants;
 import com.xuanwugate.blockchain.core.BlockchainService;
 import com.xuanwugate.rpc.RPCProxy;
 
@@ -26,7 +26,7 @@ public class BitcoinBlockchainService extends BlockchainService {
         JSONObject jsonObject = JSONObject.parseObject(res);
         JSONObject jsonResult = jsonObject.getJSONObject("result");
         GeneralInformationResponse obj = GeneralInformationResponse.parse(jsonResult);
-        obj.setCurrency(EnumCoin.BTC);
+        obj.setCurrency(BlockchainConstants.BITCOIN.toUpperCase());
         return obj;
     }
 }

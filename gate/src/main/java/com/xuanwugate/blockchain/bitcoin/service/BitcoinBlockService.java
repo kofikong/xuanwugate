@@ -77,7 +77,4 @@ public class BitcoinBlockService extends BlockService{
 		}
 		return null;
 	}
-
-	
-	
 }

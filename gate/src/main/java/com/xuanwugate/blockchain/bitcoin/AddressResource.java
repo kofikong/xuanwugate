@@ -1,5 +1,7 @@
 package com.xuanwugate.blockchain.bitcoin;
 
+import java.io.IOException;
+
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -16,7 +18,9 @@ import org.jboss.resteasy.annotations.jaxrs.PathParam;
 import com.xuanwugate.blockchain.bitcoin.response.AddressDetailsResponse;
 import com.xuanwugate.blockchain.bitcoin.response.GenerateAddressResponse;
 import com.xuanwugate.blockchain.bitcoin.service.BitcoinAddressService;
+import com.xuanwugate.blockchain.constants.BlockchainConstants;
 import com.xuanwugate.client.XuanwuGate;
+import com.xuanwugate.rpc.ErrorInfo;
 import com.xuanwugate.rpc.Response;
 
 @Path("/{version}/bc/btc")
@@ -37,11 +41,11 @@ public class AddressResource {
         Bitcoin btc = gate.connectToBtc(network);
         BitcoinAddressService service = btc.getAddressService();
         GenerateAddressResponse obj = service.generateAddress();
-        return Response.create(obj);
-      } catch (Exception e) {
+        return Response.build(obj);
+      } catch (IOException e) {
         e.printStackTrace();
         log.debug(e.getMessage());
-        return Response.error(-1);
+        return Response.error(ErrorInfo.BlockchainConnectionError(BlockchainConstants.BITCOIN));
       }
     }
 
@@ -56,11 +60,11 @@ public class AddressResource {
         Bitcoin btc = gate.connectToBtc(network);
         BitcoinAddressService service = btc.getAddressService();
         AddressDetailsResponse obj = service.getAddressDetails(address);
-        return Response.create(obj);
-      } catch (Exception e) {
+        return Response.build(obj);
+      } catch (IOException e) {
         e.printStackTrace();
         log.debug(e.getMessage());
-        return Response.error(-1);
+        return Response.error(ErrorInfo.BlockchainConnectionError(BlockchainConstants.BITCOIN));
       }
     }
 }

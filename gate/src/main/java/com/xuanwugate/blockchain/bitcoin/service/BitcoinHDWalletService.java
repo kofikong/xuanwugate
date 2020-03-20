@@ -2,13 +2,11 @@ package com.xuanwugate.blockchain.bitcoin.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
 
 import com.alibaba.fastjson.JSONObject;
 import com.xuanwugate.blockchain.bitcoin.constants.BitcoinCoreConstants;
-import com.xuanwugate.blockchain.bitcoin.requestparams.CreateWallet;
+import com.xuanwugate.blockchain.bitcoin.requestparams.CreateHDWallet;
 import com.xuanwugate.blockchain.bitcoin.rpcrequest.BitcoinRequest;
 import com.xuanwugate.blockchain.bitcoin.rpcresponse.AddMultisigAddressResult;
 import com.xuanwugate.blockchain.bitcoin.rpcresponse.CreateWalletResult;
@@ -16,21 +14,21 @@ import com.xuanwugate.blockchain.bitcoin.rpcresponse.GetAddressesByLabelResult;
 import com.xuanwugate.blockchain.bitcoin.rpcresponse.ListLabelsResult;
 import com.xuanwugate.blockchain.bitcoin.rpcresponse.RPCResult;
 import com.xuanwugate.blockchain.bitcoin.rpcresponse.WalletInfo;
-import com.xuanwugate.blockchain.bitcoin.response.CreateWalletResponse;
+import com.xuanwugate.blockchain.bitcoin.response.CreateHDWalletResponse;
 import com.xuanwugate.blockchain.common.EndpointConfig;
-import com.xuanwugate.blockchain.core.WalletService;
+import com.xuanwugate.blockchain.core.HDWalletService;
 import com.xuanwugate.rpc.RPCProxy;
 
 /**
  * BitcoinWalletService
  */
-public class BitcoinWalletService extends WalletService {
+public class BitcoinHDWalletService extends HDWalletService {
 
-	public BitcoinWalletService(EndpointConfig config) {
+	public BitcoinHDWalletService(EndpointConfig config) {
 		super(config);
 	}
 
-	public CreateWalletResponse createWallet(CreateWallet info) throws IOException, IllegalArgumentException {
+	public CreateHDWalletResponse createHDWallet(CreateHDWallet info) throws IOException, IllegalArgumentException {
 		if(info == null || !info.valid()){
 			throw new IllegalArgumentException("invalid walletName or invalid addresses");
 		}
@@ -41,25 +39,26 @@ public class BitcoinWalletService extends WalletService {
 			throw new IllegalArgumentException("invalid walletName");
 		}
 
-		//import Privkey
-		boolean importPrivkey = importAddressesPrivkey(cwr.getName(),info.getAddresses());
-		if(!importPrivkey){
-			throw new IllegalArgumentException("invalid addresses");
-		}
+		// //import Privkey
+		// boolean importPrivkey = importAddressesPrivkey(cwr.getName(),info.getAddresses());
+		// if(!importPrivkey){
+		// 	throw new IllegalArgumentException("invalid addresses");
+		// }
 
-		//list addresses
-		List<String> addresses = getAddresses(cwr.getName());
-		if(addresses.size() < info.getAddresses().size()){
-			throw new IllegalArgumentException("invalid walletName or invalid addresses");
-		}
+		// //list addresses
+		// List<String> addresses = getAddresses(cwr.getName());
+		// if(addresses.size() < info.getAddresses().size()){
+		// 	throw new IllegalArgumentException("invalid walletName or invalid addresses");
+		// }
 
-		CreateWalletResponse response  = new CreateWalletResponse();
-		response.setAddresses(addresses);
-		response.setWalletName(cwr.getName());
-		return response;
+		// CreateWalletResponse response  = new CreateWalletResponse();
+		// response.setAddresses(addresses);
+		// response.setWalletName(cwr.getName());
+		// return response;
+		return null;
 	}
 
-	private CreateWalletResult onceCreateWallet(CreateWallet info) throws IOException {
+	private CreateWalletResult onceCreateWallet(CreateHDWallet info) throws IOException {
 		if(info == null || !info.valid()){
 			return null;
 		}

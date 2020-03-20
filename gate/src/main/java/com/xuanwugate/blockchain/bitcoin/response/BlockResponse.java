@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
-
+import com.xuanwugate.rpc.ErrorInfo;
 import com.xuanwugate.rpc.IPayload;
 
 /**
@@ -189,5 +189,17 @@ public class BlockResponse implements IPayload {
 
 	public List<String> getTx() {
 		return tx;
+	}
+
+	@Override
+	public void setError(ErrorInfo error) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ErrorInfo getError() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
