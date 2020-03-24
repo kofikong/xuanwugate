@@ -50,12 +50,5 @@ public class RequestFilter implements ContainerRequestFilter {
             context.abortWith(rb.build());
             return;
         }
-
-        // Principal caller = ctx.getUserPrincipal();
-        // if(caller == null){
-        //     ResponseBuilder rb = Response.status(401);
-        //     context.abortWith(rb.build());
-        //     return;
-        // }
 	}
 }
