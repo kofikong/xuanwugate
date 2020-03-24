@@ -15,16 +15,13 @@ import static org.hamcrest.CoreMatchers.equalTo;
 public class AddressResourceTest {
     @Test
     public void testGenerateAddressEndpoint() {
-        GenerateTokenResourceTest token = new GenerateTokenResourceTest();
-        final String token_id = token.getJWTGenerateToken();
         final Response res = given()
         .header("X-API-KEY", "your-api-key")
-        .header("Authorization", "Bearer "+token_id)
-        .post("http://localhost:8080/v1/bc/btc/testnet/address").prettyPeek();
+        .post("/v1/bc/btc/testnet/address").prettyPeek();
         final JsonPath bodyJson = res.getBody().jsonPath();
         final int errorCode = bodyJson.getInt("errorCode");
         final String payload = bodyJson.getString("payload");
         res.then().statusCode(equalTo(200));
-        Assertions.assertTrue(errorCode == 0 && payload != null && !token_id.isEmpty());
+        Assertions.assertTrue(errorCode == 0 && payload != null);
     }
 }
