@@ -2,6 +2,7 @@ package com.xuanwugate.blockchain.bitcoin;
 
 import com.xuanwugate.authentication.jwt.TokenUtils;
 import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,12 +27,14 @@ public class GeneralInformationResourceTest {
 
     @Test
     public void testGetNodeInformationEndpoint() {
-        given().auth()
-          .oauth2(token)
-          .when().get("/v1/bc/btc/mainnet/info")
-          .then()
-             .statusCode(200)
-             .body(is("hello"));
+        Response response = given().auth()
+                .oauth2(token)
+                .when()
+                .get("/v1/bc/btc/mainnet/info")
+                .andReturn();
+
+        response.then()
+                .statusCode(200);
     }
 
     @Test
