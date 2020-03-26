@@ -32,7 +32,7 @@ public class GeneralInformationResourceTest {
     public void testGetNodeInformationEndpoint() {
         final Response res = given()
         .auth().oauth2(token)
-        .get("http://localhost:8080/v1/bc/btc/testnet/info").prettyPeek();
+        .get("/v1/bc/btc/testnet/info").prettyPeek();
         final JsonPath bodyJson = res.getBody().jsonPath();
         final String payload = bodyJson.getString("payload");
         final String meta = bodyJson.getString("meta");
@@ -44,7 +44,7 @@ public class GeneralInformationResourceTest {
     public void testGetBlockByHashEndpoint() {
         final Response res = given()
         .auth().oauth2(token)
-        .get("http://localhost:8080/v1/bc/btc/mainnet/blocks/00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09").prettyPeek();
+        .get("/v1/bc/btc/mainnet/blocks/00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09").prettyPeek();
         final JsonPath bodyJson = res.getBody().jsonPath();
         final String payload = bodyJson.getString("payload");
         final String meta = bodyJson.getString("meta");
@@ -54,9 +54,10 @@ public class GeneralInformationResourceTest {
 
     @Test
     public void testGetBlockByHeightEndpoint() {
+
         final Response res = given()
         .auth().oauth2(token)
-        .get("http://localhost:8080/v1/bc/btc/testnet/blocks/564349").prettyPeek();
+        .get("/v1/bc/btc/testnet/blocks/564349").prettyPeek();
         final JsonPath bodyJson = res.getBody().jsonPath();
         final String payload = bodyJson.getString("payload");
         final String meta = bodyJson.getString("meta");
@@ -68,7 +69,7 @@ public class GeneralInformationResourceTest {
     public void testGetBlockLasterEndpoint() {
         final Response res = given()
         .auth().oauth2(token)
-        .get("http://localhost:8080/v1/bc/btc/testnet/blocks/latest").prettyPeek();
+        .get("/v1/bc/btc/testnet/blocks/latest").prettyPeek();
         final JsonPath bodyJson = res.getBody().jsonPath();
         final String payload = bodyJson.getString("payload");
         final String meta = bodyJson.getString("meta");
