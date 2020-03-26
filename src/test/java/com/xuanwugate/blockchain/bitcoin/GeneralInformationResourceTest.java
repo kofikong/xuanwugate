@@ -33,7 +33,7 @@ public class GeneralInformationResourceTest {
     public void testGetNodeInformationEndpoint() {
         final Response res = given()
         .auth().oauth2(token)
-        .get("/v1/bc/btc/testnet/info").prettyPeek();
+        .get("/v1/bc/btc/mainnet/info").prettyPeek();
         final JsonPath bodyJson = res.getBody().jsonPath();
         //Response Body, maybe it well null.
         final String payload = bodyJson.getString("payload");

@@ -40,7 +40,7 @@ public class AddressResourceTest {
     public Map<String, String>  generateAddressEndpoint(String token){
         final Response res = given()
         .auth().oauth2(token)
-        .post("http://localhost:8080/v1/bc/btc/testnet/address").prettyPeek();
+        .post("/v1/bc/btc/testnet/address").prettyPeek();
         final JsonPath bodyJson = res.getBody().jsonPath();
         final String payload = bodyJson.getString("payload");
         final String meta = bodyJson.getString("meta");

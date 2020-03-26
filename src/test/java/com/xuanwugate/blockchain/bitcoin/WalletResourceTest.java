@@ -44,7 +44,7 @@ public class WalletResourceTest {
         .auth().oauth2(token)
         .queryParam("walletName",walletName)
         .queryParam("addresses",addresses)
-        .post("http://localhost:8080/v1/bc/btc/testnet/wallets").prettyPeek();
+        .post("/v1/bc/btc/testnet/wallets").prettyPeek();
         final JsonPath bodyJson = res.getBody().jsonPath();
         //Response Body, maybe it well null.
         final String payload = bodyJson.getString("payload");
