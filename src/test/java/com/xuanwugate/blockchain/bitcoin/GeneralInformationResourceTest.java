@@ -35,7 +35,9 @@ public class GeneralInformationResourceTest {
         .auth().oauth2(token)
         .get("/v1/bc/btc/testnet/info").prettyPeek();
         final JsonPath bodyJson = res.getBody().jsonPath();
-        final Map<String,String> payload = bodyJson.getMap("payload",String.class,String.class);
+        //Response Body, maybe it well null.
+        final String payload = bodyJson.getString("payload");
+        //Response Error
         final String meta = bodyJson.getString("meta");
         res.then().statusCode(equalTo(200));
         Assertions.assertTrue(payload != null,meta);
@@ -47,7 +49,9 @@ public class GeneralInformationResourceTest {
         .auth().oauth2(token)
         .get("/v1/bc/btc/mainnet/blocks/00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09").prettyPeek();
         final JsonPath bodyJson = res.getBody().jsonPath();
-        final Map<String,String> payload = bodyJson.getMap("payload",String.class,String.class);
+        //Response Body, maybe it well null.
+        final String payload = bodyJson.getString("payload");
+        //Response Error
         final String meta = bodyJson.getString("meta");
         res.then().statusCode(equalTo(200));
         Assertions.assertTrue(payload != null,meta);
@@ -60,7 +64,9 @@ public class GeneralInformationResourceTest {
         .auth().oauth2(token)
         .get("/v1/bc/btc/testnet/blocks/564349").prettyPeek();
         final JsonPath bodyJson = res.getBody().jsonPath();
-        final Map<String,String> payload = bodyJson.getMap("payload",String.class,String.class);
+        //Response Body, maybe it well null.
+        final String payload = bodyJson.getString("payload");
+        //Response Error
         final String meta = bodyJson.getString("meta");
         res.then().statusCode(equalTo(200));
         Assertions.assertTrue(payload != null,meta);
@@ -72,7 +78,9 @@ public class GeneralInformationResourceTest {
         .auth().oauth2(token)
         .get("/v1/bc/btc/testnet/blocks/latest").prettyPeek();
         final JsonPath bodyJson = res.getBody().jsonPath();
-        final Map<String,String> payload = bodyJson.getMap("payload",String.class,String.class);
+        //Response Body, maybe it well null.
+        final String payload = bodyJson.getString("payload");
+        //Response Error
         final String meta = bodyJson.getString("meta");
         res.then().statusCode(equalTo(200));
         Assertions.assertTrue(payload != null,meta);

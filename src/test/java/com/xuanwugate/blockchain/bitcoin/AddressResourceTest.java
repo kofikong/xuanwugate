@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,14 +31,22 @@ public class AddressResourceTest {
 
     @Test
     public void testGenerateAddressEndpoint() {
-        final Response res = given().auth()
-        .oauth2(token)
-        .post("/v1/bc/btc/testnet/address").prettyPeek();
-        final JsonPath bodyJson = res.getBody().jsonPath();
+        // GenerateTokenResourceTest token = new GenerateTokenResourceTest();
+        // final String token_id = token.getJWTGenerateToken();
+        Map<String, String> addressInfo = generateAddressEndpoint(token);
+        Assertions.assertTrue(addressInfo == null);
+    }
 
-        Map<String,String> payload = bodyJson.getMap("payload",String.class,String.class);
+    public Map<String, String>  generateAddressEndpoint(String token){
+        final Response res = given()
+        .auth().oauth2(token)
+        .post("http://localhost:8080/v1/bc/btc/testnet/address").prettyPeek();
+        final JsonPath bodyJson = res.getBody().jsonPath();
+        final String payload = bodyJson.getString("payload");
         final String meta = bodyJson.getString("meta");
         res.then().statusCode(equalTo(200));
         Assertions.assertTrue(payload != null,meta);
+        Map<String, String> result = bodyJson.getMap("payload",String.class,String.class);
+        return result;
     }
 }

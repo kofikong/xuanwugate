@@ -4,7 +4,7 @@ package com.xuanwugate.rpc;
  * BaseResponse
  */
 public abstract class BaseResponse {
-    private ErrorInfo error;
+    protected ErrorInfo error;
 
     public void setError(ErrorInfo error){
         this.error = error;
@@ -16,5 +16,9 @@ public abstract class BaseResponse {
     
     public ErrorInfo getError(){
         return this.error;
+    }
+
+    public boolean isError(){
+        return this.error != null;
     }
 }

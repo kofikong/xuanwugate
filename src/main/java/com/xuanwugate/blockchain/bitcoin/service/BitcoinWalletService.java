@@ -12,11 +12,12 @@ import com.xuanwugate.blockchain.bitcoin.rpcresponse.AddMultisigAddressResult;
 import com.xuanwugate.blockchain.bitcoin.rpcresponse.CreateWalletResult;
 import com.xuanwugate.blockchain.bitcoin.rpcresponse.GetAddressesByLabelResult;
 import com.xuanwugate.blockchain.bitcoin.rpcresponse.ListLabelsResult;
-import com.xuanwugate.rpc.RPCResult;
+import com.xuanwugate.rpc.RPCResultFactory;
 import com.xuanwugate.blockchain.bitcoin.rpcresponse.WalletInfo;
 import com.xuanwugate.blockchain.bitcoin.response.CreateWalletResponse;
 import com.xuanwugate.blockchain.common.EndpointConfig;
 import com.xuanwugate.blockchain.core.WalletService;
+import com.xuanwugate.rpc.ErrorInfo;
 import com.xuanwugate.rpc.RPCProxy;
 import com.xuanwugate.rpc.RPCProxyResponse;
 
@@ -29,15 +30,17 @@ public class BitcoinWalletService extends WalletService {
 		super(config);
 	}
 
-	public CreateWalletResponse createWallet(CreateWallet info) throws IOException, IllegalArgumentException {
+	public CreateWalletResponse createWallet(CreateWallet info){
+		CreateWalletResponse response  = new CreateWalletResponse();
+
 		if(info == null || !info.valid()){
-			throw new IllegalArgumentException("invalid walletName or invalid addresses");
+			response.setError(ErrorInfo.WalletNameError(info != null ? info.getWalletName(): "null"));
+			return response;
 		}
 
 		//create wallet
 		CreateWalletResult cwr = onceCreateWallet(info);
 		if(cwr.isError()){
-			CreateWalletResponse response  = new CreateWalletResponse();
 			response.setError(cwr.getError());
 			return response;
 		}
@@ -45,16 +48,17 @@ public class BitcoinWalletService extends WalletService {
 		//import Privkey
 		boolean importPrivkey = importAddressesPrivkey(cwr.getName(),info.getAddresses());
 		if(!importPrivkey){
-			throw new IllegalArgumentException("invalid addresses");
+			response.setError(ErrorInfo.AddressesInvalidError(String.join(",", info.getAddresses())));
+			return response;
 		}
 
 		//list addresses
 		List<String> addresses = getAddresses(cwr.getName());
 		if(addresses.size() < info.getAddresses().size()){
-			throw new IllegalArgumentException("invalid walletName or invalid addresses");
+			response.setError(ErrorInfo.WalletNameError(cwr.getName()));
+			return response;
 		}
-
-		CreateWalletResponse response  = new CreateWalletResponse();
+		
 		response.setAddresses(addresses);
 		response.setWalletName(cwr.getName());
 		return response;
@@ -69,7 +73,7 @@ public class BitcoinWalletService extends WalletService {
 		request.setMethod(BitcoinCoreConstants.CREATE_WALLET);
 		request.getParams().add(info.getWalletName());
 		RPCProxyResponse res = RPCProxy.run(request);
-		return RPCResult.parse(CreateWalletResult.class, res.getMessage());
+		return RPCResultFactory.parse(CreateWalletResult.class, res.getMessage());
 	}
 
 	private boolean importAddressesPrivkey(String walletName, List<String> addressList){
@@ -123,7 +127,7 @@ public class BitcoinWalletService extends WalletService {
 		request.getParams().add(addressList.size());
 		request.getParams().add(addressList.toArray(new String[addressList.size()]));
 		RPCProxyResponse res = RPCProxy.run(request);
-		AddMultisigAddressResult result = RPCResult.parse(AddMultisigAddressResult.class, res.getMessage());
+		AddMultisigAddressResult result = RPCResultFactory.parse(AddMultisigAddressResult.class, res.getMessage());
 		return result!= null && result.getError() == null;
 	}
 
@@ -136,10 +140,10 @@ public class BitcoinWalletService extends WalletService {
 		request.setMethod(BitcoinCoreConstants.GET_WALLET_INFO);
 		request.setUriWithWalletName(walletName);
 		RPCProxyResponse res = RPCProxy.run(request);
-		return RPCResult.parse(WalletInfo.class, res.getMessage());
+		return RPCResultFactory.parse(WalletInfo.class, res.getMessage());
 	}
 
-	private List<String> getAddresses(String walletName) throws IOException{
+	private List<String> getAddresses(String walletName){
 		List<String> allAddresses = new ArrayList<String>();
 		ListLabelsResult labels = listLabels(walletName);
 		for(String label : labels.getLabels()){
@@ -152,7 +156,7 @@ public class BitcoinWalletService extends WalletService {
 		return allAddresses;
 	} 
 
-	private GetAddressesByLabelResult getAddressesByLabel(String walletName,String label) throws IOException{
+	private GetAddressesByLabelResult getAddressesByLabel(String walletName,String label){
 		if(walletName == null){
 			walletName = "";
 		}
@@ -162,10 +166,10 @@ public class BitcoinWalletService extends WalletService {
 		request.setUriWithWalletName(walletName);
 		request.getParams().add(label);
 		RPCProxyResponse res = RPCProxy.run(request);
-		return RPCResult.parse(GetAddressesByLabelResult.class, res.getMessage());
+		return RPCResultFactory.parse(GetAddressesByLabelResult.class, res.getMessage());
 	}
 
-	private ListLabelsResult listLabels(String walletName) throws IOException{
+	private ListLabelsResult listLabels(String walletName){
 		if(walletName == null){
 			walletName = "";
 		}
@@ -174,6 +178,6 @@ public class BitcoinWalletService extends WalletService {
 		request.setMethod(BitcoinCoreConstants.LIST_LABELS);
 		request.setUriWithWalletName(walletName);
 		RPCProxyResponse res = RPCProxy.run(request);
-		return RPCResult.parse(ListLabelsResult.class, res.getMessage());
+		return RPCResultFactory.parse(ListLabelsResult.class, res.getMessage());
 	}
 }

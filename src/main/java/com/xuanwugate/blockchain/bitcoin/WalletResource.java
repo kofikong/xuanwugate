@@ -52,17 +52,11 @@ public class WalletResource {
     @RolesAllowed("Subscriber")
     @Produces(MediaType.APPLICATION_JSON)
     public Response createWallet(@Context SecurityContext ctx,@BeanParam CreateWallet info) {
-      try {
         XuanwuGate gate = new XuanwuGate(version);
         Bitcoin btc = gate.connectToBtc(network);
         BitcoinWalletService service = btc.getWalletService();
         CreateWalletResponse obj = service.createWallet(info);
         return Response.build(obj);
-      } catch (IOException e) {
-        e.printStackTrace();
-        log.debug(e.getMessage());
-        return Response.error(ErrorInfo.BlockchainConnectionError(BlockchainConstants.BITCOIN));
-      }
     }
 
     @POST
@@ -70,16 +64,10 @@ public class WalletResource {
     @RolesAllowed("Subscriber")
     @Produces(MediaType.APPLICATION_JSON)
     public Response createHDWallet(@Context SecurityContext ctx, @BeanParam CreateHDWallet info) {
-      try {
         XuanwuGate gate = new XuanwuGate(version);
         Bitcoin btc = gate.connectToBtc(network);
         BitcoinHDWalletService service = btc.getHDWalletService();
         CreateHDWalletResponse obj = service.createHDWallet(info);
         return Response.build(obj);
-      } catch (IOException e) {
-        e.printStackTrace();
-        log.debug(e.getMessage());
-        return Response.error(ErrorInfo.BlockchainConnectionError(BlockchainConstants.BITCOIN));
-      }
     }
 }

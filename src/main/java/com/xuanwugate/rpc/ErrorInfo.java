@@ -34,4 +34,17 @@ public class ErrorInfo {
     public static ErrorInfo BlockchainConnectionError(String message){
         return new ErrorInfo(31,String.format("Blockchain connection error: %s", message));
     }
+
+
+    
+    public static ErrorInfo WalletNameError(String walletName){
+        return new ErrorInfo(2100,String.format("Field 'walletName' Error: %s", walletName));
+    }
+
+
+    public static ErrorInfo AddressesInvalidError(String address){
+        return new ErrorInfo(2101,String.format("addresses' contains invalid address(es): %s", address));
+    }
+
+    
 }

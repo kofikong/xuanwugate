@@ -10,6 +10,7 @@ import com.xuanwugate.blockchain.common.EndpointConfig;
 import com.xuanwugate.blockchain.core.BlockService;
 import com.xuanwugate.rpc.RPCProxy;
 import com.xuanwugate.rpc.RPCProxyResponse;
+import com.xuanwugate.rpc.RPCResultFactory;
 
 /**
  * BitcoinBlockService
@@ -25,18 +26,21 @@ public class BitcoinBlockService extends BlockService{
 		request.setMethod(BitcoinCoreConstants.GET_BLOCK);
 		request.getParams().add(bockHash);
 		RPCProxyResponse res = RPCProxy.run(request);
-		System.out.println(res);
-		JSONObject jsonObject = JSONObject.parseObject(res.getMessage());
-		if(jsonObject != null){
-			String jsonError = jsonObject.getString("error");
-			JSONObject jsonResult = jsonObject.getJSONObject("result");
+		BlockResponse block = RPCResultFactory.parse(BlockResponse.class,res.getMessage());
+		return block;
 
-			if(jsonError == null && jsonResult != null){
-				BlockResponse obj = BlockResponse.parse(jsonResult);
-				return obj;
-			}
-		}
-		return null;
+		// System.out.println(res);
+		// JSONObject jsonObject = JSONObject.parseObject(res.getMessage());
+		// if(jsonObject != null){
+		// 	String jsonError = jsonObject.getString("error");
+		// 	JSONObject jsonResult = jsonObject.getJSONObject("result");
+
+		// 	if(jsonError == null && jsonResult != null){
+		// 		BlockResponse obj = BlockResponse.parse(jsonResult);
+		// 		return obj;
+		// 	}
+		// }
+		// return null;
 	}
 
 	public BlockResponse getBlockByHeight(int height) throws IOException {
@@ -44,6 +48,7 @@ public class BitcoinBlockService extends BlockService{
 		request.setMethod(BitcoinCoreConstants.GET_BLOCK_HASH);
 		request.getParams().add(height);
 		RPCProxyResponse res = RPCProxy.run(request);
+		
 		System.out.println(res);
 		JSONObject jsonObject = JSONObject.parseObject(res.getMessage());
 		if(jsonObject != null){

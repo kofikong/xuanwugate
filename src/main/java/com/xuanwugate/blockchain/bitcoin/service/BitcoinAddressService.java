@@ -3,7 +3,7 @@ package com.xuanwugate.blockchain.bitcoin.service;
 import com.xuanwugate.blockchain.bitcoin.constants.BitcoinCoreConstants;
 import com.xuanwugate.blockchain.bitcoin.rpcrequest.BitcoinRequest;
 import com.xuanwugate.blockchain.bitcoin.rpcresponse.AddressInfo;
-import com.xuanwugate.rpc.RPCResult;
+import com.xuanwugate.rpc.RPCResultFactory;
 import com.xuanwugate.blockchain.bitcoin.response.GenerateAddressResponse;
 import com.xuanwugate.blockchain.bitcoin.response.AddressDetailsResponse;
 import com.xuanwugate.blockchain.common.EndpointConfig;
@@ -45,7 +45,7 @@ public class BitcoinAddressService extends AddressService {
 		request.setMethod(BitcoinCoreConstants.GET_NEW_ADDRESS);
 		request.setUriSuffix("/wallet/");
 		RPCProxyResponse res = RPCProxy.run(request);
-		String address = RPCResult.parse(String.class,res.getMessage());
+		String address = RPCResultFactory.parse(String.class,res.getMessage());
 		return address;
 	}
 
@@ -59,7 +59,7 @@ public class BitcoinAddressService extends AddressService {
 		request.setUriWithWalletName("");
 		request.getParams().add(address);
 		RPCProxyResponse res = RPCProxy.run(request);
-		String privateKey = RPCResult.parse(String.class,res.getMessage());
+		String privateKey = RPCResultFactory.parse(String.class,res.getMessage());
 		return privateKey;
 	}
 
@@ -73,7 +73,7 @@ public class BitcoinAddressService extends AddressService {
 		request.setUriSuffix("/wallet/");
 		request.getParams().add(address);
 		RPCProxyResponse res = RPCProxy.run(request);
-		AddressInfo info = RPCResult.parse(AddressInfo.class,res.getMessage());
+		AddressInfo info = RPCResultFactory.parse(AddressInfo.class,res.getMessage());
 		return info;
 	}
 
