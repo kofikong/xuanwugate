@@ -29,10 +29,10 @@ public class GeneralInformationResource {
     @Inject
     JsonWebToken jwt;
 
-    @javax.ws.rs.PathParam("version")
+    @PathParam("version")
     private String version;
 
-    @javax.ws.rs.PathParam("network")
+    @PathParam("network")
     private String network;
 
     @GET
