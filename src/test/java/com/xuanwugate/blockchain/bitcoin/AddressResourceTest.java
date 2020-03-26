@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 
@@ -35,9 +36,10 @@ public class AddressResourceTest {
         .oauth2(token)
         .post("/v1/bc/btc/testnet/address").prettyPeek();
         final JsonPath bodyJson = res.getBody().jsonPath();
-        final int errorCode = bodyJson.getInt("errorCode");
-        final String payload = bodyJson.getString("payload");
+
+        Map<String,String> payload = bodyJson.getMap("payload",String.class,String.class);
+        final String meta = bodyJson.getString("meta");
         res.then().statusCode(equalTo(200));
-        Assertions.assertTrue(errorCode == 0 && payload != null);
+        Assertions.assertTrue(payload != null,meta);
     }
 }

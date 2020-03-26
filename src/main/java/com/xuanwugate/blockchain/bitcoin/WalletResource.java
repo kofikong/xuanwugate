@@ -11,8 +11,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
+
+import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.logging.Logger;
-import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 import com.xuanwugate.blockchain.bitcoin.requestparams.CreateHDWallet;
 import com.xuanwugate.blockchain.bitcoin.requestparams.CreateWallet;
@@ -25,12 +26,18 @@ import com.xuanwugate.client.XuanwuGate;
 import com.xuanwugate.rpc.ErrorInfo;
 import com.xuanwugate.rpc.Response;
 
-@Path("/{version}/bc/btc")
+@Path("/{version}/bc/btc/{network}")
 public class WalletResource {
     private static final Logger log = Logger.getLogger(WalletResource.class);
 
-    // @Inject
-    // JsonWebToken jwt;
+    @Inject
+    JsonWebToken jwt;
+
+    @javax.ws.rs.PathParam("version")
+    private String version;
+
+    @javax.ws.rs.PathParam("network")
+    private String network;
 
     /**
      * Create normal wallet
@@ -41,11 +48,10 @@ public class WalletResource {
      * @return {"payload": {"addresses": [ADDRESS1,ADDRESS2,...],"walletName": "demowallet"}}
      */
     @POST
-    @Path("{network}/wallets")
-    // @PermitAll
-    // @RolesAllowed("Subscriber")
+    @Path("wallets")
+    @RolesAllowed("Subscriber")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createWallet(@Context SecurityContext ctx, @PathParam String version, @PathParam String network,@BeanParam CreateWallet info) {
+    public Response createWallet(@Context SecurityContext ctx,@BeanParam CreateWallet info) {
       try {
         XuanwuGate gate = new XuanwuGate(version);
         Bitcoin btc = gate.connectToBtc(network);
@@ -60,11 +66,10 @@ public class WalletResource {
     }
 
     @POST
-    @Path("{network}/wallets/hd/")
-    // @PermitAll
-    // @RolesAllowed("Subscriber")
+    @Path("wallets/hd/")
+    @RolesAllowed("Subscriber")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createHDWallet(@Context SecurityContext ctx, @PathParam String version, @PathParam String network,@BeanParam CreateHDWallet info) {
+    public Response createHDWallet(@Context SecurityContext ctx, @BeanParam CreateHDWallet info) {
       try {
         XuanwuGate gate = new XuanwuGate(version);
         Bitcoin btc = gate.connectToBtc(network);
