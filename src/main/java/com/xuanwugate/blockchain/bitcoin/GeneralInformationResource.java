@@ -1,15 +1,15 @@
 package com.xuanwugate.blockchain.bitcoin;
 
 import java.io.IOException;
-import javax.annotation.security.RolesAllowed;
-import javax.inject.Inject;
+// import javax.annotation.security.RolesAllowed;
+// import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
-import org.eclipse.microprofile.jwt.JsonWebToken;
+// import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.jboss.logging.Logger;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
@@ -26,17 +26,15 @@ import com.xuanwugate.rpc.Response;
 public class GeneralInformationResource {
     private static final Logger log = Logger.getLogger(GeneralInformationResource.class);
 
-    @Inject
-    JsonWebToken jwt;
-
-    @javax.ws.rs.PathParam("version")
-    private String version;
+    // @Inject
+    // JsonWebToken jwt;
 
     @GET
     @Path("{network}/info")
-    @RolesAllowed("Subscriber")
+    // @PermitAll
+    // @RolesAllowed("Subscriber")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getNodeInformation(@Context SecurityContext ctx, @PathParam("network") String network) {
+    public Response getNodeInformation(@Context SecurityContext ctx, @PathParam String version, @PathParam String network) {
       try {
         XuanwuGate gate = new XuanwuGate(version);
         Bitcoin btc = gate.connectToBtc(network);
@@ -52,9 +50,9 @@ public class GeneralInformationResource {
 
     @GET
     @Path("{network}/blocks/{blockHash_or_blockHeight}")
-    @RolesAllowed("Subscriber")
+    // @RolesAllowed("Subscriber")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBlockByHash(@Context SecurityContext ctx, @PathParam("network") String network, @PathParam("blockHash_or_blockHeight") String blockHash_or_blockHeight) {
+    public Response getBlockByHash(@Context SecurityContext ctx, @PathParam String version, @PathParam String network, @PathParam String blockHash_or_blockHeight) {
       try {
         XuanwuGate gate = new XuanwuGate(version);
         Bitcoin btc = gate.connectToBtc(network);
@@ -76,9 +74,9 @@ public class GeneralInformationResource {
 
     @GET
     @Path("{network}/blocks/latest")
-    @RolesAllowed("Subscriber")
+    // @RolesAllowed("Subscriber")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBlockLatest(@Context SecurityContext ctx, @PathParam("network") String network) {
+    public Response getBlockLatest(@Context SecurityContext ctx, @PathParam String version, @PathParam String network) {
       try {
         XuanwuGate gate = new XuanwuGate(version);
         Bitcoin btc = gate.connectToBtc(network);
