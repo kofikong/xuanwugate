@@ -29,17 +29,11 @@ public class GeneralInformationResource {
     @Inject
     JsonWebToken jwt;
 
-    @PathParam("version")
-    private String version;
-
-    @PathParam("network")
-    private String network;
-
     @GET
     @Path("info")
     @RolesAllowed("Subscriber")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getNodeInformation(@Context SecurityContext ctx) {
+    public Response getNodeInformation(@Context SecurityContext ctx, @PathParam String version,@PathParam String network) {
       try {
         XuanwuGate gate = new XuanwuGate(version);
         Bitcoin btc = gate.connectToBtc(network);
@@ -57,7 +51,7 @@ public class GeneralInformationResource {
     @Path("blocks/{blockHash_or_blockHeight}")
     @RolesAllowed("Subscriber")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBlockByHash(@Context SecurityContext ctx, @PathParam String blockHash_or_blockHeight) {
+    public Response getBlockByHash(@Context SecurityContext ctx, @PathParam String blockHash_or_blockHeight, @PathParam String version,@PathParam String network) {
       try {
         XuanwuGate gate = new XuanwuGate(version);
         Bitcoin btc = gate.connectToBtc(network);
@@ -81,7 +75,7 @@ public class GeneralInformationResource {
     @Path("blocks/latest")
     @RolesAllowed("Subscriber")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBlockLatest(@Context SecurityContext ctx) {
+    public Response getBlockLatest(@Context SecurityContext ctx, @PathParam String version,@PathParam String network) {
       try {
         XuanwuGate gate = new XuanwuGate(version);
         Bitcoin btc = gate.connectToBtc(network);
