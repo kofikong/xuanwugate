@@ -25,6 +25,7 @@ import com.xuanwugate.blockchain.constants.BlockchainConstants;
 import com.xuanwugate.client.XuanwuGate;
 import com.xuanwugate.rpc.ErrorInfo;
 import com.xuanwugate.rpc.Response;
+import org.jboss.resteasy.annotations.jaxrs.PathParam;
 
 @Path("/{version}/bc/btc/{network}")
 public class WalletResource {
@@ -33,17 +34,15 @@ public class WalletResource {
     @Inject
     JsonWebToken jwt;
 
-    @javax.ws.rs.PathParam("version")
-    private String version;
+    @PathParam("version")
+    String version;
 
-    @javax.ws.rs.PathParam("network")
-    private String network;
+    @PathParam("network")
+    String network;
 
     /**
      * Create normal wallet
      * @param ctx
-     * @param version
-     * @param network 
      * @param info  Request Wallet Object { "walletName" : My_WALLET_NAME}, "addresses" : [ADDRESS1,ADDRESS2,...] }
      * @return {"payload": {"addresses": [ADDRESS1,ADDRESS2,...],"walletName": "demowallet"}}
      */

@@ -28,11 +28,11 @@ public class AddressResource {
     @Inject
     JsonWebToken jwt;
 
-    @javax.ws.rs.PathParam("version")
-    private String version;
+    @PathParam("version")
+    String version;
 
-    @javax.ws.rs.PathParam("network")
-    private String network;
+    @PathParam("network")
+    String network;
 
     @POST
     @Path("address")
@@ -50,7 +50,7 @@ public class AddressResource {
     @Path("address/{address}")
     @RolesAllowed("Subscriber")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAddressDetails(@Context SecurityContext ctx, @PathParam String address) {
+    public Response getAddressDetails(@Context SecurityContext ctx, @PathParam("address") String address) {
         XuanwuGate gate = new XuanwuGate(version);
         Bitcoin btc = gate.connectToBtc(network);
         BitcoinAddressService service = btc.getAddressService();
