@@ -25,9 +25,6 @@ import io.vertx.core.http.HttpServerRequest;
 public class RequestFilter implements ContainerRequestFilter {
     private static final Logger log = Logger.getLogger(RequestFilter.class);
 
-    @ConfigProperty(name="com.xuanwugate.api.key",defaultValue="your-api-key")
-    private String apiKey;
-
     @Context
     UriInfo info;
 
@@ -44,18 +41,5 @@ public class RequestFilter implements ContainerRequestFilter {
         final String address = request.remoteAddress().toString();
         log.infof("Request %s %s from IP %s", method, path, address);
         BlockchainConfig.setInstance(instance);
-        // final String xApiKey = request.getHeader("X-API-KEY");
-        // if(!apiKey.equals(xApiKey)){
-        //     ResponseBuilder rb = Response.status(401);
-        //     context.abortWith(rb.build());
-        //     return;
-        // }
-
-        // Principal caller = ctx.getUserPrincipal();
-        // if(caller == null){
-        //     ResponseBuilder rb = Response.status(401);
-        //     context.abortWith(rb.build());
-        //     return;
-        // }
 	}
 }
