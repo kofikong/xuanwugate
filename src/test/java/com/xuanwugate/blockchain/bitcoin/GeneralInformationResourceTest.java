@@ -12,7 +12,6 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import com.xuanwugate.authentication.jwt.TokenUtils;
 
@@ -47,7 +46,7 @@ public class GeneralInformationResourceTest {
     public void testGetBlockByHashEndpoint() {
         final Response res = given()
         .auth().oauth2(token)
-        .get("/v1/bc/btc/mainnet/blocks/00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09").prettyPeek();
+        .get("/v1/bc/btc/testnet/blocks/000000000000d85653a70d36b3bd8e6bdb8f7041cb69a4106406675c79e590f8").prettyPeek();
         final JsonPath bodyJson = res.getBody().jsonPath();
         //Response Body, maybe it well null.
         final String payload = bodyJson.getString("payload");
