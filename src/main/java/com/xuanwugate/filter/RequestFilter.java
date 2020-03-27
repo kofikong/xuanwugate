@@ -44,12 +44,12 @@ public class RequestFilter implements ContainerRequestFilter {
         final String address = request.remoteAddress().toString();
         log.infof("Request %s %s from IP %s", method, path, address);
         BlockchainConfig.setInstance(instance);
-        final String xApiKey = request.getHeader("X-API-KEY");
-        if(!apiKey.equals(xApiKey)){
-            ResponseBuilder rb = Response.status(401);
-            context.abortWith(rb.build());
-            return;
-        }
+        // final String xApiKey = request.getHeader("X-API-KEY");
+        // if(!apiKey.equals(xApiKey)){
+        //     ResponseBuilder rb = Response.status(401);
+        //     context.abortWith(rb.build());
+        //     return;
+        // }
 
         // Principal caller = ctx.getUserPrincipal();
         // if(caller == null){
