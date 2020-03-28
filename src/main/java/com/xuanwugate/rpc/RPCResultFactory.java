@@ -1,5 +1,6 @@
 package com.xuanwugate.rpc;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import com.alibaba.fastjson.JSONArray;
@@ -8,6 +9,7 @@ import com.alibaba.fastjson.JSONObject;
 /**
  * RPCResultFactory
  */
+@SuppressWarnings("unchecked")
 public final class RPCResultFactory {
     public static <T> T parse(final Class<T> clazz,final String jsonStr){
         JSONObject jsonObject = JSONObject.parseObject(jsonStr);
@@ -56,10 +58,10 @@ public final class RPCResultFactory {
                 if(isRPCSpecificResult){
                     RPCSpecificResult objTmp;
 					try {
-                        objTmp = (RPCSpecificResult)clazz.newInstance();
+                        objTmp = (RPCSpecificResult)clazz.getDeclaredConstructor().newInstance();
                         objTmp.init(jsonResult);
                         obj = (T)objTmp;
-					} catch (InstantiationException | IllegalAccessException e) {
+					} catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
 						e.printStackTrace();
 					}
                 }
@@ -82,10 +84,10 @@ public final class RPCResultFactory {
                 if(isRPCSpecificResult){
                     RPCSpecificResult objTmp;
 					try {
-                        objTmp = (RPCSpecificResult)clazz.newInstance();
+                        objTmp = (RPCSpecificResult)clazz.getDeclaredConstructor().newInstance();
                         objTmp.init(jsonResult);
                     return (T)objTmp;
-					} catch (InstantiationException | IllegalAccessException e) {
+					} catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
 						e.printStackTrace();
 					}
                 }

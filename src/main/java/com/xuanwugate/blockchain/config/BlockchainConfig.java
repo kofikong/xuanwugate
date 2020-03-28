@@ -1,5 +1,6 @@
 package com.xuanwugate.blockchain.config;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
@@ -20,34 +21,27 @@ public class BlockchainConfig implements BlockchainConstants {
 	public static BlockchainConfig getInstance(){
 		return BlockchainConfig.instance;
 	}
-	
-	@Inject
+
     @ConfigProperty(name="com.xuanwugate.blockchain.rpc.channel", defaultValue ="shell" )
-	private String blockchainRPCChannel;
-	
-	@Inject
+	String blockchainRPCChannel;
+
     @ConfigProperty(name="com.xuanwugate.blockchain.rpc.channel.timeout.secs", defaultValue ="10" )
-	private int blockchainRPCChannelTimeout;
-	
-	@Inject
+	int blockchainRPCChannelTimeout;
+
     @ConfigProperty(name="com.xuanwugate.blockchain.bitcoin.rpc.network", defaultValue ="mainnet" )
-	private String bitcoinRPCNetwork;
-	
-	@Inject
+	String bitcoinRPCNetwork;
+
     @ConfigProperty(name="com.xuanwugate.blockchain.rpc.url.bitcoin.mainnet", defaultValue ="" )
-    private String bitcoinRPCUriMainnet;
-	
-	@Inject
+    String bitcoinRPCUriMainnet;
+
     @ConfigProperty(name="com.xuanwugate.blockchain.rpc.url.bitcoin.testnet", defaultValue ="" )
-	private String bitcoinRPCUriTestnet;
-	
-	@Inject
+	String bitcoinRPCUriTestnet;
+
 	@ConfigProperty(name="com.xuanwugate.blockchain.rpc.request.bitcoin.contenttype",defaultValue = "text/plain;charset=UTF-8")
-	private String bitcoinRPCRequestContentType;
-	
-	@Inject
+	String bitcoinRPCRequestContentType;
+
 	@ConfigProperty(name="com.xuanwugate.blockchain.rpc.request.bitcoin.authorization.basic",defaultValue = "")
-	private String bitcoinRPCRequestAuthorizationBasic;
+	String bitcoinRPCRequestAuthorizationBasic;
 	
 	public String getBitcoinRPCUri() {
 		if(MAINNET.equals(bitcoinRPCNetwork)){
