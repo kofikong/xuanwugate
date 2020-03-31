@@ -35,7 +35,7 @@ public class AddressResourceTest {
         Assertions.assertTrue(addressInfo != null);
     }
 
-    public Map<String, String>  generateAddressEndpoint(String token){
+    private Map<String, String>  generateAddressEndpoint(String token){
         final Response res = given()
         .auth().oauth2(token)
         .post("/v1/bc/btc/testnet/address").prettyPeek();

@@ -34,8 +34,8 @@ public class WalletResourceTest {
     @Test
     public void testCreateWalletEndpoint() {
         AddressResourceTest addressTest = new AddressResourceTest();
-        Map<String,String> jsonAddress1 = addressTest.generateAddressEndpoint(token);
-        Map<String,String> jsonAddress2 = addressTest.generateAddressEndpoint(token);
+        Map<String,String> jsonAddress1 = generateAddressEndpoint(token);
+        Map<String,String> jsonAddress2 = generateAddressEndpoint(token);
         Assertions.assertTrue(jsonAddress1 != null && jsonAddress2 != null);
 
         // String walletName = "test-"+System.currentTimeMillis();
@@ -90,8 +90,8 @@ public class WalletResourceTest {
     @Test
     public void testAddAddressesToNormalWalletEndpoint() {
         AddressResourceTest addressTest = new AddressResourceTest();
-        Map<String,String> jsonAddress1 = addressTest.generateAddressEndpoint(token);
-        Map<String,String> jsonAddress2 = addressTest.generateAddressEndpoint(token);
+        Map<String,String> jsonAddress1 = generateAddressEndpoint(token);
+        Map<String,String> jsonAddress2 = generateAddressEndpoint(token);
         Assertions.assertTrue(jsonAddress1 != null && jsonAddress2 != null);
 
         String[] addresses = new String[2];
@@ -126,5 +126,18 @@ public class WalletResourceTest {
         Assertions.assertTrue(payload != null,meta);
         Map<String,String> info = bodyJson.getMap("payload",String.class ,String.class);
         info = null;
+    }
+
+    private Map<String, String>  generateAddressEndpoint(String token){
+        final Response res = given()
+                .auth().oauth2(token)
+                .post("/v1/bc/btc/testnet/address").prettyPeek();
+        final JsonPath bodyJson = res.getBody().jsonPath();
+        final String payload = bodyJson.getString("payload");
+        final String meta = bodyJson.getString("meta");
+        res.then().statusCode(equalTo(200));
+        Assertions.assertTrue(payload != null,meta);
+        Map<String, String> result = bodyJson.getMap("payload",String.class,String.class);
+        return result;
     }
 }
