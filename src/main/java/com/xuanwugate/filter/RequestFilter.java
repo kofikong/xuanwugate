@@ -44,9 +44,8 @@ public class RequestFilter implements ContainerRequestFilter {
         log.infof("Request %s %s from IP %s", method, path, address);
         BlockchainConfig.setInstance(instance);
         RocksDBUtils.createAndLoadDB(dbName);
-
-        String oauth2 = request.getHeader("Authorization");
-        oauth2 = "";
+        // String oauth2 = request.getHeader("Authorization");
+        // oauth2 = "";
         // final String xApiKey = request.getHeader("X-API-KEY");
         // if(!apiKey.equals(xApiKey)){
         //     ResponseBuilder rb = Response.status(401);

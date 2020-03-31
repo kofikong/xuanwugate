@@ -37,11 +37,11 @@ public class WalletResource {
     @Inject
     JsonWebToken jwt;
 
-    @javax.ws.rs.PathParam("version")
-    private String version;
+    @PathParam("version")
+    String version;
 
-    @javax.ws.rs.PathParam("network")
-    private String network;
+    @PathParam("network")
+    String network;
 
     /**
      * Create normal wallet
