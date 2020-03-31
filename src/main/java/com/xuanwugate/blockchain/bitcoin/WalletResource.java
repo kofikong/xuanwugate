@@ -152,16 +152,17 @@ public class WalletResource {
         return Response.build(obj);
     }
 
-    @POST
-    @Path("wallets/hd/")
-    @RolesAllowed("Subscriber")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createHDWallet(@Context SecurityContext ctx, @BeanParam CreateHDWallet info) {
-        //TODO:: Need to save wallet name to database
-        XuanwuGate gate = new XuanwuGate(version);
-        Bitcoin btc = gate.connectToBtc(network);
-        BitcoinHDWalletService service = btc.getHDWalletService();
-        CreateHDWalletResponse obj = service.createHDWallet(info);
-        return Response.build(obj);
-    }
+    
+    // @POST
+    // @Path("wallets/hd/")
+    // @RolesAllowed("Subscriber")
+    // @Produces(MediaType.APPLICATION_JSON)
+    // public Response createHDWallet(@Context SecurityContext ctx, @BeanParam CreateHDWallet info) {
+    //     //TODO:: Need to save wallet name to database
+    //     XuanwuGate gate = new XuanwuGate(version);
+    //     Bitcoin btc = gate.connectToBtc(network);
+    //     BitcoinHDWalletService service = btc.getHDWalletService();
+    //     CreateHDWalletResponse obj = service.createHDWallet(info);
+    //     return Response.build(obj);
+    // }
 }

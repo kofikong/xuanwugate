@@ -206,7 +206,13 @@ public class BitcoinWalletService extends WalletService {
 	}
 
 	public GetWalletDetailsResponse getWalletDetails(String walletName){
+		boolean isLoad = tryLoadWallet(walletName);
 		GetWalletDetailsResponse resp = new GetWalletDetailsResponse();
+		if(!isLoad){
+			resp.setError(ErrorInfo.WalletNameError(walletName));
+			return resp;
+		}
+
 		GetBalancesResult balances = getbalances(walletName);
 		if(balances == null){
 			resp.setError(ErrorInfo.WalletNameError(walletName));
@@ -255,6 +261,11 @@ public class BitcoinWalletService extends WalletService {
 
 	public GenerateAddressInWalletResponse generateAddressInNormalWallet(String walletName){
 		GenerateAddressInWalletResponse response = new GenerateAddressInWalletResponse();
+		boolean isLoad = tryLoadWallet(walletName);
+		if(!isLoad){
+			response.setError(ErrorInfo.WalletNameError(walletName));
+			return response;
+		}
 
 		//Generate address info
 		BitcoinAddressService aService = new BitcoinAddressService(this.config);

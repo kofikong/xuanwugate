@@ -21,11 +21,14 @@ public class WalletResourceTest {
      * The test generated JWT token string
      */
     private String token;
+    private String testWalletName;
 
     @BeforeEach
     public void generateToken() throws Exception {
         HashMap<String, Long> timeClaims = new HashMap<>();
         token = TokenUtils.generateTokenString("/JwtClaims.json", timeClaims);
+        testWalletName = "test-1585651865177";
+        // testWalletName = "koftestnet";
     }
 
     @Test
@@ -35,14 +38,14 @@ public class WalletResourceTest {
         Map<String,String> jsonAddress2 = addressTest.generateAddressEndpoint(token);
         Assertions.assertTrue(jsonAddress1 != null && jsonAddress2 != null);
 
-        String walletName = "test-"+System.currentTimeMillis();
+        // String walletName = "test-"+System.currentTimeMillis();
         // String walletName = "test-1584724066323";
         String[] addresses = new String[2];
         addresses[0] = jsonAddress1.get("address");
         addresses[1] = jsonAddress2.get("address");
         final Response res = given()
         .auth().oauth2(token)
-        .queryParam("walletName",walletName)
+        .queryParam("walletName",testWalletName)
         .queryParam("addresses",addresses)
         .post("/v1/bc/btc/testnet/wallets").prettyPeek();
         final JsonPath bodyJson = res.getBody().jsonPath();
@@ -74,7 +77,7 @@ public class WalletResourceTest {
         final Response res = given()
         .auth().oauth2(token)
         // .header("Authorization", "Bearer 1"+token)
-        .get("/v1/bc/btc/testnet/wallets/koftestnet").prettyPeek();
+        .get("/v1/bc/btc/testnet/wallets/"+testWalletName).prettyPeek();
         final JsonPath bodyJson = res.getBody().jsonPath();
         //Response Body, maybe it well null.
         final String payload = bodyJson.getString("payload");
@@ -91,14 +94,13 @@ public class WalletResourceTest {
         Map<String,String> jsonAddress2 = addressTest.generateAddressEndpoint(token);
         Assertions.assertTrue(jsonAddress1 != null && jsonAddress2 != null);
 
-        String walletName = "test-1584724066323";
         String[] addresses = new String[2];
         addresses[0] = jsonAddress1.get("address");
         addresses[1] = jsonAddress2.get("address");
         final Response res = given()
         .auth().oauth2(token)
         .queryParam("addresses",addresses)
-        .post("/v1/bc/btc/testnet/wallets/"+walletName+"/addresses").prettyPeek();
+        .post("/v1/bc/btc/testnet/wallets/"+testWalletName+"/addresses").prettyPeek();
         final JsonPath bodyJson = res.getBody().jsonPath();
         //Response Body, maybe it well null.
         final String payload = bodyJson.getString("payload");
@@ -112,10 +114,9 @@ public class WalletResourceTest {
 
     @Test
     public void testGenerateAddressInWalletEndpoint() {
-        String walletName = "test-1584724066323";
         final Response res = given()
         .auth().oauth2(token)
-        .post("/v1/bc/btc/testnet/wallets/"+walletName+"/addresses/generate").prettyPeek();
+        .post("/v1/bc/btc/testnet/wallets/"+testWalletName+"/addresses/generate").prettyPeek();
         final JsonPath bodyJson = res.getBody().jsonPath();
         //Response Body, maybe it well null.
         final String payload = bodyJson.getString("payload");
