@@ -1,17 +1,13 @@
-package com.xuanwugate.rpc;
+package com.xuanwugate.response;
 
 /**
  * BaseResponse
  */
-public abstract class BaseResponse {
+public abstract class BaseResponse implements IResponse {
     protected ErrorInfo error;
 
     public void setError(ErrorInfo error){
         this.error = error;
-    }
-
-    public void setError(RPCResult result){
-        this.error = result!= null ? result.getError():null;
     }
     
     public ErrorInfo getError(){

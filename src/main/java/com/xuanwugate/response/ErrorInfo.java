@@ -1,4 +1,4 @@
-package com.xuanwugate.rpc;
+package com.xuanwugate.response;
 
 /**
  * ErrorInfo
@@ -45,6 +45,9 @@ public class ErrorInfo {
     public static ErrorInfo AddressesInvalidError(String address){
         return new ErrorInfo(2101,String.format("addresses' contains invalid address(es): %s", address));
     }
-
+    
+    public static ErrorInfo TransactionIdInvalidError(){
+        return new ErrorInfo(2310,"transaction' size must be exactly 64 characters");
+    }
     
 }

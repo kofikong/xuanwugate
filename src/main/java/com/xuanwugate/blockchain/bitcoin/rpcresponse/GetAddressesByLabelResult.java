@@ -14,8 +14,6 @@ import com.xuanwugate.rpc.RPCSpecificResult;
 public class GetAddressesByLabelResult extends RPCResult  implements RPCSpecificResult{
     List<String> addresses;
 
-	 
-
 	@Override
 	public void init(JSON json) {
         if(addresses == null){
@@ -29,13 +27,9 @@ public class GetAddressesByLabelResult extends RPCResult  implements RPCSpecific
         }
 	}
 
-
-
 	public List<String> getAddresses() {
 		return addresses;
 	}
-
-
 
 	public void setAddresses(List<String> addresses) {
 		this.addresses = addresses;

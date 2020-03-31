@@ -1,7 +1,4 @@
 package com.xuanwugate.blockchain.bitcoin.service;
-
-import java.io.IOException;
-
 import com.alibaba.fastjson.JSONObject;
 import com.xuanwugate.blockchain.bitcoin.constants.BitcoinCoreConstants;
 import com.xuanwugate.blockchain.bitcoin.rpcrequest.BitcoinRequest;
@@ -21,7 +18,7 @@ public class BitcoinBlockService extends BlockService{
 		super(config);
 	}
 
-	public BlockResponse getBlockByHash(String bockHash) throws IOException {
+	public BlockResponse getBlockByHash(String bockHash) {
 		BitcoinRequest request = new BitcoinRequest();
 		request.setMethod(BitcoinCoreConstants.GET_BLOCK);
 		request.getParams().add(bockHash);
@@ -43,7 +40,7 @@ public class BitcoinBlockService extends BlockService{
 		// return null;
 	}
 
-	public BlockResponse getBlockByHeight(int height) throws IOException {
+	public BlockResponse getBlockByHeight(int height){
 		BitcoinRequest request = new BitcoinRequest();
 		request.setMethod(BitcoinCoreConstants.GET_BLOCK_HASH);
 		request.getParams().add(height);
@@ -62,12 +59,12 @@ public class BitcoinBlockService extends BlockService{
 		return null;
 	}
 
-	public BlockResponse getBlockByHeight(String heightStr) throws IOException {
+	public BlockResponse getBlockByHeight(String heightStr) {
 		int height = Integer.parseInt(heightStr);
 		return getBlockByHeight(height);
 	}
 
-	public BlockResponse getBlockLatest() throws IOException {
+	public BlockResponse getBlockLatest(){
 		BitcoinRequest request = new BitcoinRequest();
 		request.setMethod(BitcoinCoreConstants.GET_BLOCK_COUNT);
 		RPCProxyResponse res = RPCProxy.run(request);

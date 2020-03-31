@@ -12,12 +12,12 @@ import com.xuanwugate.blockchain.bitcoin.rpcresponse.AddMultisigAddressResult;
 import com.xuanwugate.blockchain.bitcoin.rpcresponse.CreateWalletResult;
 import com.xuanwugate.blockchain.bitcoin.rpcresponse.GetAddressesByLabelResult;
 import com.xuanwugate.blockchain.bitcoin.rpcresponse.ListLabelsResult;
+import com.xuanwugate.blockchain.bitcoin.rpcresponse.WalletInfoResult;
 import com.xuanwugate.rpc.RPCResultFactory;
-import com.xuanwugate.blockchain.bitcoin.rpcresponse.WalletInfo;
 import com.xuanwugate.blockchain.bitcoin.response.CreateHDWalletResponse;
 import com.xuanwugate.blockchain.common.EndpointConfig;
 import com.xuanwugate.blockchain.core.HDWalletService;
-import com.xuanwugate.rpc.ErrorInfo;
+import com.xuanwugate.response.ErrorInfo;
 import com.xuanwugate.rpc.RPCProxy;
 import com.xuanwugate.rpc.RPCProxyResponse;
 
@@ -117,7 +117,7 @@ public class BitcoinHDWalletService extends HDWalletService {
 			return false;
 		}
 
-		WalletInfo walletInfo = getWalletInfo(walletName);
+		WalletInfoResult walletInfo = getWalletInfo(walletName);
 
 		if(walletInfo == null || !walletName.equals(walletInfo.getWalletname())){
 			return false;
@@ -134,7 +134,7 @@ public class BitcoinHDWalletService extends HDWalletService {
 		return result!= null && result.getError() == null;
 	}
 
-	private WalletInfo getWalletInfo(String walletName) {
+	private WalletInfoResult getWalletInfo(String walletName) {
 		if(walletName == null){
 			walletName = "";
 		}
@@ -143,7 +143,7 @@ public class BitcoinHDWalletService extends HDWalletService {
 		request.setMethod(BitcoinCoreConstants.GET_WALLET_INFO);
 		request.setUriWithWalletName(walletName);
 		RPCProxyResponse res = RPCProxy.run(request);
-		return RPCResultFactory.parse(WalletInfo.class, res.getMessage());
+		return RPCResultFactory.parse(WalletInfoResult.class, res.getMessage());
 	}
 
 	private List<String> getAddresses(String walletName) {

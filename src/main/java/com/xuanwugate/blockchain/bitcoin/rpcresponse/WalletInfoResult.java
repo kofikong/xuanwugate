@@ -5,9 +5,9 @@ import java.math.BigDecimal;
 import com.xuanwugate.rpc.RPCResult;
 
 /**
- * WalletInfo
+ * WalletInfoResult
  */
-public class WalletInfo extends RPCResult {
+public class WalletInfoResult extends RPCResult {
     private String walletname;
     private int walletversion;
     private BigDecimal balance;

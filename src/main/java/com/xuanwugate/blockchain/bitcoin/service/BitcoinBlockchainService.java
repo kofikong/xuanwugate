@@ -20,7 +20,7 @@ public class BitcoinBlockchainService extends BlockchainService {
         super(config);
     }
       
-    public GeneralInformationResponse getNodeInformation() throws IOException {
+    public GeneralInformationResponse getNodeInformation() {
         BitcoinRequest request = new BitcoinRequest();
         request.setMethod(BitcoinCoreConstants.GET_NODE_INFORMATION);
         RPCProxyResponse res = RPCProxy.run(request);

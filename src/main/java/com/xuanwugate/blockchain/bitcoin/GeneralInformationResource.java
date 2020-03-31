@@ -1,6 +1,5 @@
 package com.xuanwugate.blockchain.bitcoin;
 
-import java.io.IOException;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -17,10 +16,8 @@ import com.xuanwugate.blockchain.bitcoin.response.BlockResponse;
 import com.xuanwugate.blockchain.bitcoin.response.GeneralInformationResponse;
 import com.xuanwugate.blockchain.bitcoin.service.BitcoinBlockService;
 import com.xuanwugate.blockchain.bitcoin.service.BitcoinBlockchainService;
-import com.xuanwugate.blockchain.constants.BlockchainConstants;
 import com.xuanwugate.client.XuanwuGate;
-import com.xuanwugate.rpc.ErrorInfo;
-import com.xuanwugate.rpc.Response;
+import com.xuanwugate.response.Response;
 
 @Path("/{version}/bc/btc/{network}")
 public class GeneralInformationResource {
@@ -29,30 +26,29 @@ public class GeneralInformationResource {
     @Inject
     JsonWebToken jwt;
 
+    @javax.ws.rs.PathParam("version")
+    private String version;
+
+    @javax.ws.rs.PathParam("network")
+    private String network;
+
     @GET
     @Path("info")
     @RolesAllowed("Subscriber")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getNodeInformation(@Context SecurityContext ctx, @PathParam("version") String version,@PathParam("network") String network) {
-      try {
+    public Response getNodeInformation(@Context SecurityContext ctx) {
         XuanwuGate gate = new XuanwuGate(version);
         Bitcoin btc = gate.connectToBtc(network);
         BitcoinBlockchainService service = btc.getBlockchainService();
         GeneralInformationResponse obj = service.getNodeInformation();
         return Response.build(obj);
-      } catch (IOException e) {
-        e.printStackTrace();
-        log.debug(e.getMessage());
-        return Response.error(ErrorInfo.BlockchainConnectionError(BlockchainConstants.BITCOIN));
-      }
     }
 
     @GET
     @Path("blocks/{blockHash_or_blockHeight}")
     @RolesAllowed("Subscriber")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBlockByHash(@Context SecurityContext ctx, @PathParam("blockHash_or_blockHeight") String blockHash_or_blockHeight, @PathParam("version") String version,@PathParam("network") String network) {
-      try {
+    public Response getBlockByHash(@Context SecurityContext ctx, @PathParam("blockHash_or_blockHeight") String blockHash_or_blockHeight) {
         XuanwuGate gate = new XuanwuGate(version);
         Bitcoin btc = gate.connectToBtc(network);
         BitcoinBlockService service = btc.getBlockService();
@@ -64,28 +60,17 @@ public class GeneralInformationResource {
           obj = service.getBlockByHash(blockHash_or_blockHeight);
         }
         return Response.build(obj);
-      } catch (IOException e) {
-        e.printStackTrace();
-        log.debug(e.getMessage());
-        return Response.error(ErrorInfo.BlockchainConnectionError(BlockchainConstants.BITCOIN));
-      }
     }
 
     @GET
     @Path("blocks/latest")
     @RolesAllowed("Subscriber")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getBlockLatest(@Context SecurityContext ctx, @PathParam("version") String version,@PathParam("network") String network) {
-      try {
+    public Response getBlockLatest(@Context SecurityContext ctx) {
         XuanwuGate gate = new XuanwuGate(version);
         Bitcoin btc = gate.connectToBtc(network);
         BitcoinBlockService service = btc.getBlockService();
         BlockResponse obj = service.getBlockLatest();
         return Response.build(obj);
-      } catch (IOException e) {
-        e.printStackTrace();
-        log.debug(e.getMessage());
-        return Response.error(ErrorInfo.BlockchainConnectionError(BlockchainConstants.BITCOIN));
-      }
     }
 }

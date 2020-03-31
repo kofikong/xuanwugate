@@ -19,7 +19,7 @@ import com.xuanwugate.blockchain.bitcoin.response.AddressDetailsResponse;
 import com.xuanwugate.blockchain.bitcoin.response.GenerateAddressResponse;
 import com.xuanwugate.blockchain.bitcoin.service.BitcoinAddressService;
 import com.xuanwugate.client.XuanwuGate;
-import com.xuanwugate.rpc.Response;
+import com.xuanwugate.response.Response;
 
 @Path("/{version}/bc/btc/{network}")
 public class AddressResource {

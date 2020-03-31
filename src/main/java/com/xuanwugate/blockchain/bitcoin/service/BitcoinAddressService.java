@@ -30,7 +30,8 @@ public class BitcoinAddressService extends AddressService {
 		// 	e.printStackTrace();
 		// }
 
-		String address = getNewAddress();
+		//Generate address in default wallet
+		String address = getNewAddress("");
 		String privateKey = dumpPrivkey(address);
 		AddressInfo addressInfo = getAddressInfo(address);
 		if(address == null || privateKey == null || addressInfo == null){
@@ -40,23 +41,52 @@ public class BitcoinAddressService extends AddressService {
 		return GenerateAddressResponse.parse(address,privateKey,addressInfo.getPubkey(),null);
 	}
 
-	private String getNewAddress() {
+	public GenerateAddressResponse generateAddressByWallet(String walletName) {
+		// try {
+		// 	String newAddress = this.getAddress(AddressType.BIP32ExtendedPublicKey);
+		// 	newAddress = "";
+		// } catch (Exception e) {
+		// 	// TODO Auto-generated catch block
+		// 	e.printStackTrace();
+		// }
+
+		//Generate address in the walletName
+		String address = getNewAddress(walletName);
+		String privateKey = dumpPrivkeyInWallet(walletName,address);
+		AddressInfo addressInfo = getAddressInfo(address);
+		if(address == null || privateKey == null || addressInfo == null){
+			return null;
+		}
+
+		return GenerateAddressResponse.parse(address,privateKey,addressInfo.getPubkey(),null);
+	}
+
+	private String getNewAddress(String walleName) {
+		if(walleName == null){
+			walleName = "";
+		}
+
 		BitcoinRequest request = new BitcoinRequest();
 		request.setMethod(BitcoinCoreConstants.GET_NEW_ADDRESS);
-		request.setUriSuffix("/wallet/");
+		request.setUriSuffix("/wallet/"+walleName);
 		RPCProxyResponse res = RPCProxy.run(request);
 		String address = RPCResultFactory.parse(String.class,res.getMessage());
 		return address;
 	}
 
 	public String dumpPrivkey (String address){
+		// Dump private key from default wallet
+		return dumpPrivkeyInWallet("",address);
+	}
+
+	public String dumpPrivkeyInWallet (String walletName,String address){
 		if(address == null){
 			return null;
 		}
 
 		BitcoinRequest request = new BitcoinRequest();
 		request.setMethod(BitcoinCoreConstants.DUMP_PRIV_KEY);
-		request.setUriWithWalletName("");
+		request.setUriWithWalletName(walletName);
 		request.getParams().add(address);
 		RPCProxyResponse res = RPCProxy.run(request);
 		String privateKey = RPCResultFactory.parse(String.class,res.getMessage());

@@ -1,5 +1,5 @@
 {
-    "iss": "https://quarkus.io/using-jwt-rbac",
+    "iss": "http://www.xuanwugate.com/using-jwt-rbac",
     "jti": "a-123",
     "sub": "jdoe-using-jwt-rbac",
     "upn": "jdoe@quarkus.io",

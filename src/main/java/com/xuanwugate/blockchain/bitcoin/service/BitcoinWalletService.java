@@ -1,6 +1,5 @@
 package com.xuanwugate.blockchain.bitcoin.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,13 +10,23 @@ import com.xuanwugate.blockchain.bitcoin.rpcrequest.BitcoinRequest;
 import com.xuanwugate.blockchain.bitcoin.rpcresponse.AddMultisigAddressResult;
 import com.xuanwugate.blockchain.bitcoin.rpcresponse.CreateWalletResult;
 import com.xuanwugate.blockchain.bitcoin.rpcresponse.GetAddressesByLabelResult;
+import com.xuanwugate.blockchain.bitcoin.rpcresponse.GetBalancesResult;
+import com.xuanwugate.blockchain.bitcoin.rpcresponse.ListAddressGroupingsResult;
 import com.xuanwugate.blockchain.bitcoin.rpcresponse.ListLabelsResult;
+import com.xuanwugate.blockchain.bitcoin.rpcresponse.LoadWalletResult;
 import com.xuanwugate.rpc.RPCResultFactory;
-import com.xuanwugate.blockchain.bitcoin.rpcresponse.WalletInfo;
+import com.xuanwugate.store.RocksDBUtils;
+import com.xuanwugate.store.WalletType;
+import com.xuanwugate.blockchain.bitcoin.rpcresponse.WalletInfoResult;
 import com.xuanwugate.blockchain.bitcoin.response.CreateWalletResponse;
+import com.xuanwugate.blockchain.bitcoin.response.GenerateAddressInWalletResponse;
+import com.xuanwugate.blockchain.bitcoin.response.GenerateAddressResponse;
+import com.xuanwugate.blockchain.bitcoin.response.GetWalletDetailsResponse;
+import com.xuanwugate.blockchain.bitcoin.response.ListNormalWalletResponse;
 import com.xuanwugate.blockchain.common.EndpointConfig;
+import com.xuanwugate.blockchain.config.BlockchainConfig;
 import com.xuanwugate.blockchain.core.WalletService;
-import com.xuanwugate.rpc.ErrorInfo;
+import com.xuanwugate.response.ErrorInfo;
 import com.xuanwugate.rpc.RPCProxy;
 import com.xuanwugate.rpc.RPCProxyResponse;
 
@@ -44,6 +53,9 @@ public class BitcoinWalletService extends WalletService {
 			response.setError(cwr.getError());
 			return response;
 		}
+
+		//put normal wallet to database
+		RocksDBUtils.getDB().pushWallet(WalletType.BTC, BlockchainConfig.getInstance().getBitcoinRPCNetwork(),cwr);
 
 		//import Privkey
 		boolean importPrivkey = importAddressesPrivkey(cwr.getName(),info.getAddresses());
@@ -114,7 +126,7 @@ public class BitcoinWalletService extends WalletService {
 			return false;
 		}
 
-		WalletInfo walletInfo = getWalletInfo(walletName);
+		WalletInfoResult walletInfo = getWalletInfo(walletName);
 
 		if(walletInfo == null || !walletName.equals(walletInfo.getWalletname())){
 			return false;
@@ -131,7 +143,7 @@ public class BitcoinWalletService extends WalletService {
 		return result!= null && result.getError() == null;
 	}
 
-	private WalletInfo getWalletInfo(String walletName){
+	private WalletInfoResult getWalletInfo(String walletName){
 		if(walletName == null){
 			walletName = "";
 		}
@@ -140,7 +152,7 @@ public class BitcoinWalletService extends WalletService {
 		request.setMethod(BitcoinCoreConstants.GET_WALLET_INFO);
 		request.setUriWithWalletName(walletName);
 		RPCProxyResponse res = RPCProxy.run(request);
-		return RPCResultFactory.parse(WalletInfo.class, res.getMessage());
+		return RPCResultFactory.parse(WalletInfoResult.class, res.getMessage());
 	}
 
 	private List<String> getAddresses(String walletName){
@@ -179,5 +191,131 @@ public class BitcoinWalletService extends WalletService {
 		request.setUriWithWalletName(walletName);
 		RPCProxyResponse res = RPCProxy.run(request);
 		return RPCResultFactory.parse(ListLabelsResult.class, res.getMessage());
+	}
+
+	public ListNormalWalletResponse listNormalWallet(){		
+		// BitcoinRequest request = new BitcoinRequest();
+		// request.setMethod(BitcoinCoreConstants.LIST_WALLETS);
+		// RPCProxyResponse res = RPCProxy.run(request);
+		// return RPCResultFactory.parse(ListNormalWalletResponse.class, res.getMessage());
+
+		List<String> list = RocksDBUtils.getDB().getWalletList(WalletType.BTC, BlockchainConfig.getInstance().getBitcoinRPCNetwork());
+		ListNormalWalletResponse res = new ListNormalWalletResponse();
+		res.setPayload(list);
+		return res;
+	}
+
+	public GetWalletDetailsResponse getWalletDetails(String walletName){
+		GetWalletDetailsResponse resp = new GetWalletDetailsResponse();
+		GetBalancesResult balances = getbalances(walletName);
+		if(balances == null){
+			resp.setError(ErrorInfo.WalletNameError(walletName));
+			return resp;
+		}
+		
+		resp.setWalletName(walletName);
+		resp.setTotalBalance(balances.getTrusted().toString());
+
+		ListAddressGroupingsResult balanceGroup = getBalancesGroupByAddress(walletName);
+		resp.setAddresses(balanceGroup.getBalancesGroup());
+		return resp;
+	}
+
+	public CreateWalletResponse addAddressesToNormalWallet(String walletName,List<String> addresses){
+		CreateWalletResponse response = new CreateWalletResponse();
+		if(walletName == null){
+			response.setError(ErrorInfo.WalletNameError(walletName));
+			return response;
+		}
+
+		boolean isLoad = tryLoadWallet(walletName);
+		if(!isLoad){
+			response.setError(ErrorInfo.WalletNameError(walletName));
+			return response;
+		}
+
+		if(addresses == null || addresses.size() == 0){
+			response.setError(ErrorInfo.AddressesInvalidError(""));
+			return response;
+		}
+
+		//import Privkey
+		boolean importPrivkey = importAddressesPrivkey(walletName,addresses);
+		if(!importPrivkey){
+			response.setError(ErrorInfo.AddressesInvalidError(String.join(",", addresses)));
+			return response;
+		}
+
+		//list addresses
+		List<String> tmpAddresses = getAddresses(walletName);
+		response.setAddresses(tmpAddresses);
+		response.setWalletName(walletName);
+		return response;
+	}
+
+	public GenerateAddressInWalletResponse generateAddressInNormalWallet(String walletName){
+		GenerateAddressInWalletResponse response = new GenerateAddressInWalletResponse();
+
+		//Generate address info
+		BitcoinAddressService aService = new BitcoinAddressService(this.config);
+		GenerateAddressResponse addressInfo = aService.generateAddressByWallet(walletName);
+		response.setAddress_info(addressInfo);
+
+		//Get normal wallet info
+		CreateWalletResponse walletInfo = new CreateWalletResponse();
+		List<String> tmpAddresses = getAddresses(walletName);
+		walletInfo.setAddresses(tmpAddresses);
+		walletInfo.setWalletName(walletName);
+		response.setWallet_info(walletInfo);
+		return response;
+	}
+
+	private boolean tryLoadWallet(String walletName){
+		LoadWalletResult res = loadWallet(walletName);
+		if(res.getError() == null){
+			return true;
+		}
+		else{
+			//-4 重复加载报错
+			return res.getError().getCode() == -4;
+		}
+		
+		/**
+		 {
+			"result": null,
+			"error": {
+				"code": -4,
+				"message": "Wallet file verification failed: Error loading wallet koftest4. Duplicate -wallet filename specified."
+			},
+			"id": "koftest3"
+		}
+		 */
+	}
+
+	private LoadWalletResult loadWallet(String walletName){
+		BitcoinRequest request = new BitcoinRequest();
+		request.setMethod(BitcoinCoreConstants.LOAD_WALLET);
+		request.getParams().add(walletName);
+		RPCProxyResponse res = RPCProxy.run(request);
+		LoadWalletResult result = RPCResultFactory.parse(LoadWalletResult.class, res.getMessage());
+		return result;
+	}
+
+	private GetBalancesResult getbalances(String walletName){
+		BitcoinRequest request = new BitcoinRequest();
+		request.setMethod(BitcoinCoreConstants.GET_BALANCES);
+		request.setUriWithWalletName(walletName);
+		RPCProxyResponse res = RPCProxy.run(request);
+		GetBalancesResult balances = RPCResultFactory.parse(GetBalancesResult.class, res.getMessage());
+		return balances;
+	}
+
+	private ListAddressGroupingsResult getBalancesGroupByAddress(String walletName){
+		BitcoinRequest request = new BitcoinRequest();
+		request.setMethod(BitcoinCoreConstants.LIST_ADDRESS_GROUPINGS);
+		request.setUriWithWalletName(walletName);
+		RPCProxyResponse res = RPCProxy.run(request);
+		ListAddressGroupingsResult balances = RPCResultFactory.parse(ListAddressGroupingsResult.class, res.getMessage());
+		return balances;
 	}
 }

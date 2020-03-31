@@ -4,46 +4,59 @@ package com.xuanwugate.blockchain.bitcoin.constants;
  * BitcoinCoreConstants
  */
 public interface BitcoinCoreConstants {
+    /*[Blockchain]*/
     /**
-     * curl --user user --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockchaininfo", "params": [] }' -H 'content-type: text/plain;' https://btccore-test.bdnodes.net?auth=4-k3zyRSDj2zEV1NO3m4BAOXYp1c4WdxqNWrJcuhxlk
+     * curl --user user --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockchaininfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:18332/
      */
     String GET_NODE_INFORMATION = "getblockchaininfo";
 
     /**
-     * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblock", "params": ["00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09"] }' -H 'content-type: text/plain;' http://127.0.0.1:8332/
+     * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblock", "params": ["00000000c937983704a73af28acdec37b049d214adbda81d7e2a3dd146f6ed09"] }' -H 'content-type: text/plain;' http://127.0.0.1:18332/
      */
     String GET_BLOCK = "getblock";
 
     /**
-     * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockhash", "params": [1000] }' -H 'content-type: text/plain;' http://127.0.0.1:8332/
+     * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockhash", "params": [1000] }' -H 'content-type: text/plain;' http://127.0.0.1:18332/
      */
     String GET_BLOCK_HASH = "getblockhash";
 
     /**
-     * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockcount", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8332/
+     * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getblockcount", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:18332/
      */
     String GET_BLOCK_COUNT = "getblockcount";
 
 
+    /*[Address]*/
     /**
-     * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getnewaddress", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8332/
+     * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getnewaddress", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:18332/
      */
     String GET_NEW_ADDRESS = "getnewaddress";
 
      /**   
-     * --user myusername --data-binary '{"method":"dumpprivkey","params":["2MtxGty81MZvSB5qEvhPpvUfypXU9NGsQFq"],"id":"koftest3","jsonrpc":"2.0"}' -H 'content-type: text/plain;' http://127.0.0.1:8332/
+     * --user myusername --data-binary '{"method":"dumpprivkey","params":["2MtxGty81MZvSB5qEvhPpvUfypXU9NGsQFq"],"id":"koftest3","jsonrpc":"2.0"}' -H 'content-type: text/plain;' http://127.0.0.1:18332/
      */
     String DUMP_PRIV_KEY = "dumpprivkey";
 
     /**
-     * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressinfo", "params": ["1PSSGeFHDnKNxiEyFrD1wcEaHr9hrQDDWc"] }' -H 'content-type: text/plain;' http://127.0.0.1:8332/
+     * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressinfo", "params": ["1PSSGeFHDnKNxiEyFrD1wcEaHr9hrQDDWc"] }' -H 'content-type: text/plain;' http://127.0.0.1:18332/
      */
     String GET_ADDRESS_INFO = "getaddressinfo";
 
+    /*[Wallet]*/
     /**
-     * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "createwallet", "params": ["testwallet"] }' -H 'content-type: text/plain;' http://127.0.0.1:8332/
+     * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "createwallet", "params": ["testwallet"] }' -H 'content-type: text/plain;' http://127.0.0.1:18332/
      */
     String CREATE_WALLET = "createwallet";
+
+    /**
+     * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "loadwallet", "params": ["test"] }' -H 'content-type: text/plain;' http://127.0.0.1:8332/
+     */
+    String LOAD_WALLET = "loadwallet";
+
+    /**
+     * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listwallets", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:18332/
+     */
+    String LIST_WALLETS = "listwallets";
 
     /**
      * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "addmultisigaddress", "params": [2, "[\"16sSauSf5pF2UkUwvKGq4qjNRzBZYqgEL5\",\"171sgjn4YtPu27adkKGrdDwzRTxnRkBfKV\"]"] }' -H 'content-type: text/plain;' http://127.0.0.1:8332/
@@ -51,12 +64,23 @@ public interface BitcoinCoreConstants {
     String ADD_MULTISIG_ADDRESS = "addmultisigaddress";
 
     /**
-     * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getwalletinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:8332/wallet/walletName
+     * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getwalletinfo", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:18332/wallet/walletName
      */
     String GET_WALLET_INFO = "getwalletinfo";
     
     /**
-     * curl --user myusername --data-binary '{"method":"importprivkey","params":["cWALDVKUUR9eZCC3qk1MjQBuAq9MKQppEw7w1DCdqoSkr57SEYEW","testnetDVD",false],"id":"koftest3","jsonrpc":"2.0"}' -H 'content-type: text/plain;' http://127.0.0.1:8332/wallet/walletName
+     * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getbalances", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:18332/wallet/walletName
+     */
+    String GET_BALANCES = "getbalances";
+    
+    /**
+     * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "listaddressgroupings", "params": [] }' -H 'content-type: text/plain;' http://127.0.0.1:18332/wallet/walletName
+     */
+    String LIST_ADDRESS_GROUPINGS = "listaddressgroupings";
+    
+    
+    /**
+     * curl --user myusername --data-binary '{"method":"importprivkey","params":["cWALDVKUUR9eZCC3qk1MjQBuAq9MKQppEw7w1DCdqoSkr57SEYEW","testnetDVD",false],"id":"koftest3","jsonrpc":"2.0"}' -H 'content-type: text/plain;' http://127.0.0.1:18332/wallet/walletName
      */
     String IMPORT_PRIVKEY = "importprivkey";
     
@@ -69,6 +93,19 @@ public interface BitcoinCoreConstants {
      * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getaddressesbylabel", "params": ["tabby"] }' -H 'content-type: text/plain;' http://127.0.0.1:8332/wallet/walletName
      */
     String GET_ADDRESSES_BY_LABEL = "getaddressesbylabel";
+
+
+    /*[Transaction]*/
+    /**
+     * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "gettransaction", "params": ["txidString"] }' -H 'content-type: text/plain;' http://127.0.0.1:8332/wallet/walletName
+     */
+    String GET_TRANSACTION = "gettransaction";
+
+    /**
+     * curl --user myusername --data-binary '{"jsonrpc": "1.0", "id":"curltest", "method": "getrawtransaction", "params": ["txidString"] }' -H 'content-type: text/plain;' http://127.0.0.1:8332
+     */
+    String GET_RAW_TRANSACTION = "getrawtransaction";
+
 
 
 

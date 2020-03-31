@@ -4,13 +4,15 @@ import java.util.ArrayList;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.xuanwugate.response.BaseResponse;
+import com.xuanwugate.response.ErrorInfo;
 
 /**
  * RPCResultFactory
  */
 public final class RPCResultFactory {
     public static <T> T parse(final Class<T> clazz,final String jsonStr){
-        JSONObject jsonObject = JSONObject.parseObject(jsonStr);
+        final JSONObject jsonObject = JSONObject.parseObject(jsonStr);
         return parse(clazz,jsonObject);
     }
     
@@ -26,10 +28,10 @@ public final class RPCResultFactory {
             return (T)result;
         }
         else {
-            Class<?>[] interfaces = clazz.getInterfaces();
+            final Class<?>[] interfaces = clazz.getInterfaces();
             boolean isRPCSpecificResult = false;
             
-            for(Class<?> i : interfaces){
+            for(final Class<?> i : interfaces){
                 if(i.equals(RPCSpecificResult.class)){
                     isRPCSpecificResult = true;
                     break;
@@ -38,20 +40,20 @@ public final class RPCResultFactory {
             
             if(jsonError != null){
                 try {
-                    T obj = (T)clazz.getDeclaredConstructor().newInstance();
+                    final T obj = (T)clazz.getDeclaredConstructor().newInstance();
                     if(BaseResponse.class.isAssignableFrom(clazz)){
-                        BaseResponse rpcObj = (BaseResponse)obj;
-                        ErrorInfo errInfo = jsonError.toJavaObject(ErrorInfo.class);
+                        final BaseResponse rpcObj = (BaseResponse)obj;
+                        final ErrorInfo errInfo = jsonError.toJavaObject(ErrorInfo.class);
                         rpcObj.setError(errInfo);
                     }                    
                     return obj;
-				} catch (Exception e) {
+				} catch (final Exception e) {
                     e.printStackTrace();
                     return null;
 				}
             }
             else if(result.getClass().equals(JSONObject.class)){
-                JSONObject jsonResult = (JSONObject)result;
+                final JSONObject jsonResult = (JSONObject)result;
                 T obj = null;
                 if(isRPCSpecificResult){
                     RPCSpecificResult objTmp;
@@ -65,19 +67,12 @@ public final class RPCResultFactory {
                 }
                 else{
                     obj = jsonResult.toJavaObject(clazz);
-                    if(RPCResult.class.isAssignableFrom(clazz)){
-                        RPCResult rpcObj = (RPCResult)obj;
-                        if(jsonError != null){
-                            ErrorInfo error = jsonError.toJavaObject(ErrorInfo.class);
-                            rpcObj.setError(error);
-                        }
-                    }
                 }
                 
                 return obj;
             }
             else if(result.getClass().equals(JSONArray.class)){
-                JSONArray jsonResult = (JSONArray)result;
+                final JSONArray jsonResult = (JSONArray)result;
             
                 if(isRPCSpecificResult){
                     RPCSpecificResult objTmp;
@@ -90,7 +85,7 @@ public final class RPCResultFactory {
 					}
                 }
                 else if("java.util.ArrayList".equals(clazz.getName())){
-                    ArrayList<String> obj = new ArrayList<String>();
+                    final ArrayList<String> obj = new ArrayList<String>();
                     for(int index =0; index < jsonResult.size(); index++){
                         obj.add(jsonResult.getString(index));
                     }

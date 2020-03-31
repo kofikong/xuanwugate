@@ -2,7 +2,7 @@ package com.xuanwugate.blockchain.bitcoin.response;
 
 import com.alibaba.fastjson.JSONObject;
 
-import com.xuanwugate.rpc.BaseResponse;
+import com.xuanwugate.response.BaseResponse;
 
 /**
  * GeneralInformation

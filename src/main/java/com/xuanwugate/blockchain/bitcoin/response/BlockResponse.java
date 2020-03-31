@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
-import com.xuanwugate.rpc.BaseResponse;
+import com.xuanwugate.response.BaseResponse;
 
 /**
  * GeneralInformation
